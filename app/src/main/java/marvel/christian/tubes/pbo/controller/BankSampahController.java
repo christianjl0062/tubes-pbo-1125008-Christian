@@ -18,6 +18,12 @@ public class BankSampahController {
         frame = new JFrame("Bank Sampah Digital - ");
         cardLayout = new CardLayout();
         mainContainer = new JPanel(cardLayout);
+
+        JPanel loginPanel = createLoginView();
+        JPanel dummyDashboard = new JPanel();
+        dummyDashboard.add(new JLabel("Selamat, Anda Berhasil Login!"));
+        mainContainer.add(loginPanel, "LOGIN_CARD");
+        mainContainer.add(dummyDashboard, "DASHBOARD_CARD");
     }
 
     public JPanel createLoginView() {
