@@ -1,0 +1,30 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# jujur bagian gitignorenya perlu dibantu ai karena gak ngerti.
+# File config untuk bisa conncection ke database lokal tiap anggota kel biar gak saling timpa 
+# alias gak bentrok bentrokan.
+db.properties
+database.properties
+.env
+
+# Folder settingan khusus VS Code di komputer masing-masing
+.vscode/
+
+# ini ditulis jaga jaga biar kalau ini dibukanya di intellij atau ide yang lain ####
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# === SYSTEM OS JAHAT ===
+# File sampah bawaan komputer (biasanya bikin kotor repo)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
