@@ -3,14 +3,14 @@
  */
 package marvel.christian.tubes.pbo;
 
+import marvel.christian.tubes.pbo.controller.BankSampahController;
 import marvel.christian.tubes.pbo.controller.BankSampahView;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Tes dulu sebelum masukin java swing.");
-        System.out.println("Maaf, ini main nya sementara belum diisiin java swing."); 
-        System.out.println("(baru separuh MVC, ini masih tahap awal)");
+        // Maaf kalau isi main nya cuma begini. (sudah kel kita usahain biar ikut mvc)
 
-        BankSampahView bsController = new BankSampahView();
+        BankSampahView view = new BankSampahView();
+        new BankSampahController(view);
     }
 }

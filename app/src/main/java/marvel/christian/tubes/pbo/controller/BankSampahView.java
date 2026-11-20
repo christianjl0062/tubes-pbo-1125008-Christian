@@ -16,17 +16,17 @@ public class BankSampahView {
     private JFrame frame;
     private CardLayout cardLayout;
     private JPanel mainContainer;
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JButton btnLogin;
 
     public BankSampahView() {
         frame = new JFrame("Bank Sampah Digital - ");
         cardLayout = new CardLayout();
         mainContainer = new JPanel(cardLayout);
 
-        JPanel loginPanel = createLoginView();
-        JPanel dummyDashboard = new JPanel();
-        dummyDashboard.add(new JLabel("Selamat, Anda Berhasil Login!"));
-        mainContainer.add(loginPanel, "LOGIN_CARD");
-        mainContainer.add(dummyDashboard, "DASHBOARD_CARD");
+        mainContainer.add(createLoginPanel(), "LOGIN_CARD");
+        mainContainer.add(createDummyDashboard(), "DASHBOARD_CARD");
 
         frame.add(mainContainer);
         frame.setSize(600, 400);
@@ -35,32 +35,40 @@ public class BankSampahView {
         frame.setVisible(true);
     }
 
-    public JPanel createLoginView() {
+    public JPanel createLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
         panel.add(new JLabel("Silahkan Anda Login Dulu.", SwingConstants.CENTER));
         
-        JTextField txtUsername = new JTextField();
+        txtUsername = new JTextField();
         txtUsername.setBorder(BorderFactory.createTitledBorder("Username"));
         panel.add(txtUsername);
 
-        JPasswordField txtPassword = new JPasswordField();
+        txtPassword = new JPasswordField();
         txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
         panel.add(txtPassword);
 
-        JButton btnLogin = new JButton("Masuk Ke App Bank Sampah");
+        btnLogin = new JButton("Masuk Ke App Bank Sampah");
         panel.add(btnLogin);
 
         return panel;
-        
-        // referensi buat bagiannya yg addAction: niruin sintaksnya dari cheatsheet GCR
-        btnLogin.addActionListener(e -> {
-            String user = txtUsername.getText();
-            if (user.isEmpty()) {
-                System.out.println("Username gak boleh kosong!");
-            } else {
-                cardLayout.show(mainContainer, "DASHBOARD_CARD");
-            }
-        });
+    }
+    
+    public JPanel createDummyDashboard() {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Selamat, Anda Berhasil Login!"));
+        return panel;
+    }
+
+    public JButton getBtnLogin() {
+        return btnLogin;
+    }
+
+    public String getUsernameInput() {
+        return txtUsername.getText();
+    }
+
+    public void showCard(String cardName) {
+        cardLayout.show(mainContainer, cardName);
     }
 }
