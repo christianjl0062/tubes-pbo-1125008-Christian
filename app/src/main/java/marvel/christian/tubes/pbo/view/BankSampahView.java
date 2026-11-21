@@ -1,4 +1,5 @@
 package marvel.christian.tubes.pbo.view;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 
@@ -8,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -19,6 +22,7 @@ public class BankSampahView {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
+    private JTextArea txtRiwayat;
 
     public BankSampahView() {
         frame = new JFrame("Bank Sampah Digital - ");
@@ -55,8 +59,13 @@ public class BankSampahView {
     }
     
     public JPanel createDummyDashboard() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(new JLabel("Selamat, Anda Berhasil Login!"));
+
+        txtRiwayat = new JTextArea();
+        txtRiwayat.setEditable(false);
+        panel.add(new JScrollPane(txtRiwayat), BorderLayout.CENTER);
         return panel;
     }
 
