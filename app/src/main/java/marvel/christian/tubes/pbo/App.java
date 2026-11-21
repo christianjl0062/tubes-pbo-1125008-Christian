@@ -4,7 +4,7 @@
 package marvel.christian.tubes.pbo;
 
 import marvel.christian.tubes.pbo.controller.BankSampahController;
-import marvel.christian.tubes.pbo.controller.BankSampahView;
+import marvel.christian.tubes.pbo.view.BankSampahView;
 
 public class App {
     public static void main(String[] args) {

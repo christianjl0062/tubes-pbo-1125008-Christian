@@ -1,9 +1,11 @@
 package marvel.christian.tubes.pbo.controller;
 
+import marvel.christian.tubes.pbo.view.BankSampahView;
+
 public class BankSampahController {
     private BankSampahView view;
 
-    public BankSampahController(BankSampahView view /*, Model model */) {
+    public BankSampahController(BankSampahView view) {
         this.view = view;
         initAppEvents();
     }

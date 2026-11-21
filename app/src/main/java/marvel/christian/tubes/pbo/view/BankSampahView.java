@@ -1,4 +1,4 @@
-package marvel.christian.tubes.pbo.controller;
+package marvel.christian.tubes.pbo.view;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 
