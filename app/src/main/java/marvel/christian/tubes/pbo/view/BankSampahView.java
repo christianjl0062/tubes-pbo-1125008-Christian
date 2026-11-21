@@ -77,7 +77,7 @@ public class BankSampahView implements DataObserver{
     public void updateRiwayatData(List<T> daftarRiwayat) {
         if (txtRiwayat != null) {
             StringBuilder teksRiwayatData = new StringBuilder();
-            
+              
         } else {
             StringBuilder teksRiwayat = new StringBuilder();
             for (String item : daftarRiwayat) {
