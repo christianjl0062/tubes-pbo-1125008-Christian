@@ -66,6 +66,7 @@ public class BankSampahView {
         txtRiwayat = new JTextArea();
         txtRiwayat.setEditable(false);
         panel.add(new JScrollPane(txtRiwayat), BorderLayout.CENTER);
+        
         return panel;
     }
 
