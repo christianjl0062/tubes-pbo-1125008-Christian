@@ -2,6 +2,7 @@ package marvel.christian.tubes.pbo.view;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,8 +15,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import marvel.christian.tubes.pbo.models.DataObserver;
+
 // bagian nya Christian.
-public class BankSampahView {
+public class BankSampahView implements DataObserver{
     private JFrame frame;
     private CardLayout cardLayout;
     private JPanel mainContainer;
@@ -66,8 +69,22 @@ public class BankSampahView {
         txtRiwayat = new JTextArea();
         txtRiwayat.setEditable(false);
         panel.add(new JScrollPane(txtRiwayat), BorderLayout.CENTER);
-        
+
         return panel;
+    }
+
+    @Override
+    public void updateRiwayatData(List<T> daftarRiwayat) {
+        if (txtRiwayat != null) {
+            StringBuilder teksRiwayatData = new StringBuilder();
+            
+        } else {
+            StringBuilder teksRiwayat = new StringBuilder();
+            for (String item : daftarRiwayat) {
+                teksRiwayat.append("- ").append(item).append("\n");
+            }
+            txtRiwayat.setText(teksRiwayat.toString();
+        }
     }
 
     public JButton getBtnLogin() {

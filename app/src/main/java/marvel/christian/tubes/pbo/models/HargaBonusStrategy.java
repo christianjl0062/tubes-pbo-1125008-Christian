@@ -1,6 +1,6 @@
 package marvel.christian.tubes.pbo.models;
 
-public class HargaBonusStrategy {
+public class HargaBonusStrategy implements PricingStrategy {
     private double bonusPersen;
 
     public HargaBonusStrategy(double bonusPersen) {
