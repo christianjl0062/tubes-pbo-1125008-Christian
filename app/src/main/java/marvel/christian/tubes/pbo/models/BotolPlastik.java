@@ -4,8 +4,7 @@ package marvel.christian.tubes.pbo.models;
 public class BotolPlastik extends SampahAnorganik {
     private String tipePlastik;
 
-    public BotolPlastik(String kodeSampah, String namaSampah, double hargaSampahPerKg,
-                        String jenisBahan, String tipePlastik) {
+    public BotolPlastik(String kodeSampah, String namaSampah, double hargaSampahPerKg, String jenisBahan, String tipePlastik) {
         super(kodeSampah, namaSampah, hargaSampahPerKg, jenisBahan);
         this.tipePlastik = tipePlastik;
     }

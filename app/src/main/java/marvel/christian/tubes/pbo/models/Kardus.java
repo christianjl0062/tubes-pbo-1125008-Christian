@@ -11,7 +11,7 @@ public class Kardus extends SampahAnorganik {
 
     @Override
     public String infoSampah() {
-        if (kering) {
+        if (kering == true) {
             return "Kardus " + getNamaSampah() + " sudah kering dan layak untuk ditumpuk rapi.";
         } else {
             return "Kardus " + getNamaSampah() + " basah dan tidak akan diterima" + 

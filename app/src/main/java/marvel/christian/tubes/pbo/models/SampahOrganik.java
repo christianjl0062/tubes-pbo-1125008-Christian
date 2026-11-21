@@ -3,8 +3,7 @@ package marvel.christian.tubes.pbo.models;
 // Christian
 public class SampahOrganik extends Sampah {
     private int estimasiHariBusuk; 
-    // artinya: durasi estimasi berapa hari lagi si sampahnya bakalan busuk atau basi.
-
+    
     public SampahOrganik(String kodeSampah, String namaSampah, double hargaSampahPerKg, int estimasiHariBusuk) {
         super(kodeSampah, namaSampah, hargaSampahPerKg);
         this.estimasiHariBusuk = estimasiHariBusuk;
