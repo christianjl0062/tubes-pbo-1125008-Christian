@@ -13,7 +13,7 @@ public class LoginPanel extends JPanel {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
-    private JLabel lblStatusLogin;
+    private JLabel labelStatusLogin;
 
     public LoginPanel() {
         setLayout(new GridLayout(5, 1, 10, 10));
@@ -30,8 +30,8 @@ public class LoginPanel extends JPanel {
         txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
         add(txtPassword);
 
-        lblStatusLogin = new JLabel(" ", SwingConstants.CENTER);
-        add(lblStatusLogin);
+        labelStatusLogin = new JLabel(" ", SwingConstants.CENTER);
+        add(labelStatusLogin);
 
         btnLogin = new JButton("Masuk Ke App Bank Sampah");
         add(btnLogin);
@@ -50,13 +50,12 @@ public class LoginPanel extends JPanel {
     }
 
     public void setStatusLogin(String pesan) {
-        lblStatusLogin.setText(pesan);
+        labelStatusLogin.setText(pesan);
     }
 
     public void resetForm() {
         txtUsername.setText("");
         txtPassword.setText("");
-        lblStatusLogin.setText(" ");
-    }
+        labelStatusLogin.setText(" ");
     }
 }
