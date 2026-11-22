@@ -22,13 +22,13 @@ public class BankSampahController {
                 view.showCard("NASABAH_CARD");
             } else if (user.equals("petugas")) {
                 view.getLoginPanel().resetForm();
-                view.showCard("NASABAH_CARD");
+                view.showCard("PETUGAS_CARD");
             } else if (user.equals("admin")) {
                 view.getLoginPanel().resetForm();
-                view.showCard("NASABAH_CARD");
+                view.showCard("ADMIN_CARD");
             } else {
                 view.getLoginPanel().setStatusLogin("Akun tidak ditemukan!");
-            }   
+            }
         });
     }
 }

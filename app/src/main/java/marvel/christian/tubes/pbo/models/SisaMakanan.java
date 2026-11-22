@@ -11,9 +11,16 @@ public class SisaMakanan extends SampahOrganik {
 
     @Override
     public String infoSampah() {
-        return "Sisa makanan " + getNamaSampah() + " akan membusuk dalam "
-                + getEstimasiHariBusuk() + " hari. " +
-                (berbauTajam ? "Harap ditutup rapat karena berbau tajam." : "");
+        String info = "Sisa makanan " + getNamaSampah() + 
+        " akan membusuk dalam " + getEstimasiHariBusuk() + " hari. ";
+
+        if (berbauTajam) {
+            info = info + "Harap ditutup rapat karena berbau tajam.";
+        } else {
+            info = info + "";
+        }
+        
+        return info;
     }
 
     @Override
