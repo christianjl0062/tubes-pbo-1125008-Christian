@@ -4,12 +4,11 @@
 # Ignore Gradle build output directory
 build
 
-# jujur bagian gitignorenya perlu dibantu ai karena gak ngerti.
-# File config untuk bisa conncection ke database lokal tiap anggota kel biar gak saling timpa 
-# alias gak bentrok bentrokan.
+# File konfigurasi database lokal
 db.properties
 database.properties
 .env
+AppConfig.java
 
 # Folder settingan khusus VS Code di komputer masing-masing
 .vscode/
@@ -21,8 +20,7 @@ database.properties
 .classpath
 .settings/
 
-# === SYSTEM OS JAHAT ===
-# File sampah bawaan komputer (biasanya bikin kotor repo)
+# untuk nangani file sampah bawaan komputer (biasanya bikin kotor repo github)
 Thumbs.db
 ehthumbs.db
 Desktop.ini

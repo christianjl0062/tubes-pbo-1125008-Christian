@@ -1,6 +1,6 @@
 package marvel.christian.tubes.pbo.models;
 
-// Marvel
+// Bagian Marvel
 public class SisaMakanan extends SampahOrganik {
     private boolean berbauTajam;
 
@@ -9,7 +9,7 @@ public class SisaMakanan extends SampahOrganik {
         this.berbauTajam = berbauTajam;
     }
 
-    @Override
+    @Override // kedua overridenya: bagian christian
     public String infoSampah() {
         String info = "Sisa makanan " + getNamaSampah() + 
         " akan membusuk dalam " + getEstimasiHariBusuk() + " hari. ";
@@ -19,11 +19,11 @@ public class SisaMakanan extends SampahOrganik {
         } else {
             info = info + "";
         }
-        
+
         return info;
     }
 
-    @Override
+    @Override 
     public String recycleSampah() {
         return "Sisa makanan " + getNamaSampah() + " diolah menjadi pupuk kompos cair dengan cairan EM4.";
     }
