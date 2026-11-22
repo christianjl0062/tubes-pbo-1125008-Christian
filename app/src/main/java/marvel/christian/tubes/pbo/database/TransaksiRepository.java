@@ -24,4 +24,22 @@ public class TransaksiRepository {
             e.printStackTrace();
         }
     }
+
+    public static void ambilMatkul(String nim, String kodeMatkul) {
+        String sql = "INSERT INTO mahasiswa_matakuliah (nim, kode_matakuliah) VALUES (?, ?) ON CONFLICT DO NOTHING";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nim);
+            stmt.setString(2, kodeMatkul);
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Mata kuliah berhasil diambil!");
+            } else {
+                System.out.println("MK sudah diambil, atau terjadi kesalahan.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Gagal mengambil mata kuliah. Pastikan NIM dan Kode Matkul valid.");
+            e.printStackTrace();
+        }
+    }
 }
