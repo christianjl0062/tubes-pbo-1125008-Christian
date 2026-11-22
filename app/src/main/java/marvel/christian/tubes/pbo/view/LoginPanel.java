@@ -68,7 +68,6 @@ public class LoginPanel extends JPanel {
         labelStatusLogin.setText(pesan);
     }
 
-
     public void resetForm() {
         txtUsername.setText("");
         txtPassword.setText("");

@@ -78,10 +78,6 @@ public class BankSampahView implements DataObserver{
         return adminPanel;
     }
 
-    public String getUsernameInput() {
-        return txtUsername.getText();
-    }
-
     public void showCard(String cardName) {
         cardLayout.show(mainContainer, cardName);
     }

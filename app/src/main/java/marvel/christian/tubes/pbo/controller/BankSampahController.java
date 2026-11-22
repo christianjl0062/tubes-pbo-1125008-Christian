@@ -11,14 +11,24 @@ public class BankSampahController {
     }
 
     public void initAppEvents() {
-        view.getBtnLogin().addActionListener(e -> {
-            String user = view.getUsernameInput();
-            
-            if (user.isEmpty()) {
-                System.out.println("Username gak boleh kosong!");
+        view.getLoginPanel().getBtnLogin().addActionListener(e -> {
+            String user = view.getLoginPanel().getUsernameInput();
+            String userPassword = view.getLoginPanel().getPasswordInput();
+
+            if (user.isEmpty() || userPassword.isEmpty()) {
+                view.getLoginPanel().setStatusLogin("Username dan password gak boleh kosong!");
+            } else if (user.equals("nasabah")) {
+                view.getLoginPanel().resetForm();
+                view.showCard("NASABAH_CARD");
+            } else if (user.equals("petugas")) {
+                view.getLoginPanel().resetForm();
+                view.showCard("NASABAH_CARD");
+            } else if (user.equals("admin")) {
+                view.getLoginPanel().resetForm();
+                view.showCard("NASABAH_CARD");
             } else {
-                view.showCard("DASHBOARD_CARD");
-            }
+                view.getLoginPanel().setStatusLogin("Akun tidak ditemukan!");
+            }   
         });
     }
 }
