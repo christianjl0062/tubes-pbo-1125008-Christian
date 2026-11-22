@@ -1,42 +1,107 @@
 package marvel.christian.tubes.pbo.view;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 public class PetugasPanel extends JPanel {
+    private JLabel lblInfoUser;
+    private JLabel lblStatusPetugas;
+    private JComboBox<String> cmbJenisSampah;
+    private JTextField txtBeratKg;
+    private JButton btnSetorSampah;
+    private JButton btnLogout;
+    private JTextArea txtInfoDaurUlang;
+    private JTextArea txtRiwayat;
+
     public PetugasPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        panel.add(new JLabel("Silahkan Anda Login Dulu.", SwingConstants.CENTER));
-        
-        txtUsername = new JTextField();
-        txtUsername.setBorder(BorderFactory.createTitledBorder("Username"));
-        panel.add(txtUsername);
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        txtPassword = new JPasswordField();
-        txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
-        panel.add(txtPassword);
+        lblInfoUser = new JLabel("Dashboard Petugas");
+        add(lblInfoUser, BorderLayout.NORTH);
 
-        btnLogin = new JButton("Masuk Ke App Bank Sampah");
-        panel.add(btnLogin);
+        JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
 
-        return panel;
+        JPanel formSetorPanel = new JPanel(new GridLayout(5, 1, 8, 8));
+        formSetorPanel.setBorder(BorderFactory.createTitledBorder("Input Setoran Sampah"));
+
+        String[] pilihanSampah = {"Botol Plastik", "Kardus", "Sisa Makanan"};
+        cmbJenisSampah = new JComboBox<>(pilihanSampah);
+        txtBeratKg = new JTextField();
+        txtBeratKg.setBorder(BorderFactory.createTitledBorder("Berat Sampah (Kg)"));
+        btnSetorSampah = new JButton("Proses Setoran");
+        lblStatusPetugas = new JLabel(" ");
+        btnLogout = new JButton("Logout");
+
+        formSetorPanel.add(cmbJenisSampah);
+        formSetorPanel.add(txtBeratKg);
+        formSetorPanel.add(btnSetorSampah);
+        formSetorPanel.add(lblStatusPetugas);
+        formSetorPanel.add(btnLogout);
+
+        JPanel rightPanel = new JPanel(new GridLayout(2, 1, 8, 8));
+        txtInfoDaurUlang = new JTextArea();
+        txtInfoDaurUlang.setEditable(false);
+        txtInfoDaurUlang.setLineWrap(true);
+        txtInfoDaurUlang.setWrapStyleWord(true);
+        JScrollPane scrollInfo = new JScrollPane(txtInfoDaurUlang);
+        scrollInfo.setBorder(BorderFactory.createTitledBorder("Info & Instruksi Daur Ulang"));
+
+        txtRiwayat = new JTextArea();
+        txtRiwayat.setEditable(false);
+        JScrollPane scrollRiwayat = new JScrollPane(txtRiwayat);
+        scrollRiwayat.setBorder(BorderFactory.createTitledBorder("Riwayat Setoran"));
+
+        rightPanel.add(scrollInfo);
+        rightPanel.add(scrollRiwayat);
+
+        centerPanel.add(formSetorPanel);
+        centerPanel.add(rightPanel);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
-    public JButton getBtnLogin() {
-        return btnLogin;
+    public void setInfoUser(String info) {
+        lblInfoUser.setText(info);
     }
 
-    public String getUsernameInput() {
-        return txtUsername.getText();
+    public String getSelectedJenisSampah() {
+        return (String) cmbJenisSampah.getSelectedItem();
     }
 
-    public void showCard(String cardName) {
-        cardLayout.show(mainContainer, cardName);
+    public String getBeratKgInput() {
+        return txtBeratKg.getText();
+    }
+
+    public void clearBeratKg() {
+        txtBeratKg.setText("");
+    }
+
+    public void setStatusPetugas(String pesan) {
+        lblStatusPetugas.setText(pesan);
+    }
+
+    public void setInfoDaurUlang(String teks) {
+        txtInfoDaurUlang.setText(teks);
+    }
+
+    public JButton getBtnSetorSampah() {
+        return btnSetorSampah;
+    }
+
+    public JButton getBtnLogout() {
+        return btnLogout;
+    }
+
+    public void setRiwayatText(String teks) {
+        txtRiwayat.setText(teks);
     }
 }

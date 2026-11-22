@@ -1,6 +1,6 @@
 package marvel.christian.tubes.pbo.models;
 
-// Christian
+// Bagian nya Christian
 public abstract class User {
     private String idUser;
     private String username;

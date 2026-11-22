@@ -26,14 +26,26 @@ public class BankSampahView implements DataObserver{
     private JPasswordField txtPassword;
     private JButton btnLogin;
     private JTextArea txtRiwayat;
+    private LoginPanel loginPanel;
+    private NasabahPanel nasabahPanel;
+    private PetugasPanel petugasPanel;
+    private AdminPanel adminPanel;
 
     public BankSampahView() {
         frame = new JFrame("Bank Sampah Digital - ");
         cardLayout = new CardLayout();
         mainContainer = new JPanel(cardLayout);
+        
 
-        mainContainer.add(createLoginPanel(), "LOGIN_CARD");
-        mainContainer.add(createDummyDashboard(), "DASHBOARD_CARD");
+        loginPanel = new LoginPanel();
+        nasabahPanel = new NasabahPanel();
+        petugasPanel = new PetugasPanel();
+        adminPanel = new AdminPanel();
+
+        mainContainer.add(loginPanel, "LOGIN_CARD");
+        mainContainer.add(nasabahPanel, "NASABAH_CARD");
+        mainContainer.add(petugasPanel, "PETUGAS_CARD");
+        mainContainer.add(adminPanel, "ADMIN_CARD");
 
         frame.add(mainContainer);
         frame.setSize(650, 420);

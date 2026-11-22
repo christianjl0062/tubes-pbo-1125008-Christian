@@ -18,8 +18,7 @@ public class LoginPanel extends JPanel {
     public LoginPanel() {
         setLayout(new GridLayout(5, 1, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-
-        add(new JLabel("Selamat Datang di App EcoSetorSampah!"), SwingConstants.CENTER);
+        
         add(new JLabel("Silahkan Anda Login Dulu.", SwingConstants.CENTER));
 
         txtUsername = new JTextField();
