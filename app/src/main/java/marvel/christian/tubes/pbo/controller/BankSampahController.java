@@ -13,6 +13,7 @@ public class BankSampahController {
     public void initAppEvents() {
         view.getBtnLogin().addActionListener(e -> {
             String user = view.getUsernameInput();
+            
             if (user.isEmpty()) {
                 System.out.println("Username gak boleh kosong!");
             } else {
