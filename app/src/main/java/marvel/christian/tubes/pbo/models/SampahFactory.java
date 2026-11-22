@@ -12,16 +12,15 @@ public class SampahFactory {
             String jenisSampahBersih = jenisSampah.toLowerCase();
 
             if (jenisSampahBersih.equals("botol plastik")) {
-                hasil = new BotolPlastik("SMP-01", "Botol Plastik", 3000.0, "Plastik", "PET");
+                hasil = new BotolPlastik("SAM-621", "Botol Plastik", 3000.0, "Plastik", "PET");
             } else if (jenisSampahBersih.equals("kardus")) {
-                hasil = new Kardus("SMP-02", "Kardus", 2000.0, true);
+                hasil = new Kardus("SAM-224", "Kardus", 2000.0, true);
             } else if (jenisSampahBersih.equals("sisa makanan") || jenisSampahBersih.equals("sisamakanan")) {
-                hasil = new SisaMakanan("SMP-03", "Sisa Makanan", 1000.0, 3, true);
+                hasil = new SisaMakanan("SAM-199", "Sisa Makanan", 1000.0, 3, true);
             } else {
-                throw new BankSampahException("Jenis sampah tidak dikenali: " + jenisSampah);
+                throw new BankSampahException("Jenis sampahnya maaf tidak dikenali: " + jenisSampah);
             }
         }
-
         return hasil;
     }
 }

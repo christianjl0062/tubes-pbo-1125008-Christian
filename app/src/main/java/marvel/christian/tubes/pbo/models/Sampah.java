@@ -1,7 +1,7 @@
 package marvel.christian.tubes.pbo.models;
 
 // Christian
-public abstract class Sampah implements Recycleable, CashExchangeable {
+public abstract class Sampah implements Recycleable, PriceCountable {
     private String kodeSampah;
     private String namaSampah;
     private double hargaSampahPerKg;

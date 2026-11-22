@@ -36,7 +36,7 @@ public class BankSampahView implements DataObserver{
         mainContainer.add(createDummyDashboard(), "DASHBOARD_CARD");
 
         frame.add(mainContainer);
-        frame.setSize(600, 400);
+        frame.setSize(650, 420);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -74,16 +74,13 @@ public class BankSampahView implements DataObserver{
     }
 
     @Override
-    public void updateRiwayatData(List<T> daftarRiwayat) {
+    public void updateRiwayatData(List<String> daftarRiwayat) {
         if (txtRiwayat != null) {
-            StringBuilder teksRiwayatData = new StringBuilder();
-              
-        } else {
-            StringBuilder teksRiwayat = new StringBuilder();
-            for (String item : daftarRiwayat) {
-                teksRiwayat.append("- ").append(item).append("\n");
+            String teksRiwayat = "";
+            for (int i = 0; i < daftarRiwayat.size(); i++) {
+                teksRiwayat += "- " + daftarRiwayat.get(i) + "\n";
             }
-            txtRiwayat.setText(teksRiwayat.toString();
+            txtRiwayat.setText(teksRiwayat);
         }
     }
 

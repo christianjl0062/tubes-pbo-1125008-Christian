@@ -3,7 +3,7 @@ package marvel.christian.tubes.pbo.models;
 // Bagian Marvel
 public class Nasabah extends User {
     public Nasabah(String idUser, String username, String password, String namaLengkap) {
-        super(idUser, username, password, namaLengkap, "Andi Budiman");
+        super(idUser, username, password, namaLengkap, "NASABAH");
     }
 
     @Override
