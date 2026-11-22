@@ -2,6 +2,7 @@ package marvel.christian.tubes.pbo.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,19 +57,35 @@ public class NasabahPanel extends JPanel {
     }
 
 
-    public String getInfoUser() {
-        return lblInfoUser.getText();
+    public void setInfoUser(String info) {
+        lblInfoUser.setText(info);
     }
 
-    public JButton getBtnLogin() {
-        return btnLogin;
+    public void setSaldoText(double saldo) {
+        lblSaldo.setText("Saldo Anda: Rp " + saldo);
     }
 
-    public String getUsernameInput() {
-        return txtUsername.getText();
+    public String getJumlahTukarInput() {
+        return txtJumlahTukar.getText();
     }
 
-    public void showCard(String cardName) {
-        cardLayout.show(mainContainer, cardName);
+    public void clearJumlahTukar() {
+        txtJumlahTukar.setText("");
+    }
+
+    public void setStatusNasabah(String pesan) {
+        lblStatusNasabah.setText(pesan);
+    }
+
+    public JButton getBtnTukarUang() {
+        return btnTukarUang;
+    }
+
+    public JButton getBtnLogout() {
+        return btnLogout;
+    }
+
+    public void setRiwayatText(String teks) {
+        txtRiwayat.setText(teks);
     }
 }

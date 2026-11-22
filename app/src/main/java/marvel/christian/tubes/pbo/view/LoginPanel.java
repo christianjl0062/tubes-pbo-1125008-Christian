@@ -41,17 +41,34 @@ public class LoginPanel extends JPanel {
         return txtUsername.getText();
     }
 
+    public void setUsernameInput(String teksInfo) {
+        txtUsername.setText(teksInfo);
+    }
+
     public String getPasswordInput() {
         return new String(txtPassword.getPassword());
+    }
+
+    public void setPasswordInput(String teks) {
+        txtPassword.setText(teks);
     }
 
     public JButton getBtnLogin() {
         return btnLogin;
     }
 
+    public void setBtnLogin(JButton btnLogin) {
+        this.btnLogin = btnLogin;
+    }
+
+    public JLabel getStatusLogin() {
+        return labelStatusLogin;
+    }
+
     public void setStatusLogin(String pesan) {
         labelStatusLogin.setText(pesan);
     }
+
 
     public void resetForm() {
         txtUsername.setText("");
