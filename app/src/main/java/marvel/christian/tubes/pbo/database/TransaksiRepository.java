@@ -28,7 +28,6 @@ public class TransaksiRepository {
         }
     }
 
-    // READ ALL
     public static List<String> getAllTransaksi() {
         List<String> result = new ArrayList<>();
         String sql = "SELECT id, username_nasabah, jenis_aktivitas, detail_sampah, nominal, waktu FROM transaksi ORDER BY id DESC";
@@ -52,7 +51,7 @@ public class TransaksiRepository {
         }
         return result;
     }
-    
+
     public static List<String> getTransaksiByUsername(String usernameNasabah) {
         List<String> result = new ArrayList<>();
         String sql = "SELECT jenis_aktivitas, detail_sampah, nominal, waktu FROM transaksi WHERE username_nasabah = ? ORDER BY id DESC";

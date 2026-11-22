@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 public class PetugasPanel extends JPanel {
     private JLabel lblInfoUser;
     private JLabel lblStatusPetugas;
-    private JComboBox<String> cmbJenisSampah;
+    private JComboBox<String> comboJenisSampah;
     private JTextField txtBeratKg;
     private JButton btnSetorSampah;
     private JButton btnLogout;
@@ -35,14 +35,14 @@ public class PetugasPanel extends JPanel {
         formSetorPanel.setBorder(BorderFactory.createTitledBorder("Input Setoran Sampah"));
 
         String[] pilihanSampah = {"Botol Plastik", "Kardus", "Sisa Makanan"};
-        cmbJenisSampah = new JComboBox<>(pilihanSampah);
+        comboJenisSampah = new JComboBox<>(pilihanSampah);
         txtBeratKg = new JTextField();
         txtBeratKg.setBorder(BorderFactory.createTitledBorder("Berat Sampah (Kg)"));
         btnSetorSampah = new JButton("Proses Setoran");
         lblStatusPetugas = new JLabel(" ");
         btnLogout = new JButton("Logout");
 
-        formSetorPanel.add(cmbJenisSampah);
+        formSetorPanel.add(comboJenisSampah);
         formSetorPanel.add(txtBeratKg);
         formSetorPanel.add(btnSetorSampah);
         formSetorPanel.add(lblStatusPetugas);
@@ -74,7 +74,7 @@ public class PetugasPanel extends JPanel {
     }
 
     public String getSelectedJenisSampah() {
-        return (String) cmbJenisSampah.getSelectedItem();
+        return (String) comboJenisSampah.getSelectedItem();
     }
 
     public String getBeratKgInput() {
