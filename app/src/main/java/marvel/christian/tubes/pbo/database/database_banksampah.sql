@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS transaksi (
 );
 
 INSERT INTO users (username, password, nama, role, saldo) VALUES
-    ('nasabah', '123', 'Tono Budiman', 'NASABAH', 25000.0),
-    ('nasabah2', '123', 'Melissa Permana', 'NASABAH', 10000.0),
-    ('petugas', '123', 'Michael (Petugas)', 'PETUGAS', 0.0),
-    ('admin', '123', 'Christian (Admin)', 'ADMIN', 0.0);
+    ('tonob82', 'buditon0', 'Tono Budiman Gunawan', 'NASABAH', 25000.0),
+    ('mrvel07', '2000', 'Marvel Irvine W', 'NASABAH', 10000.0),
+    ('michaelh', 'xyz', 'Michael Hananta (Petugas)', 'PETUGAS', 0.0),
+    ('christianJL25', 'chris111', 'Christian Laimena (Admin)', 'ADMIN', 0.0);
 
 INSERT INTO transaksi (username_nasabah, jenis_aktivitas, detail_sampah, nominal) VALUES
-    ('nasabah', 'SETOR_SAMPAH', 'Botol Plastik (2.0 kg)', 10000.0),
-    ('nasabah', 'SETOR_SAMPAH', 'Kardus (5.0 kg)', 15000.0);
+    ('tonob82', 'SETOR_SAMPAH', 'Botol Plastik (2.5 kg)', 10000.0),
+    ('tonob82', 'SETOR_SAMPAH', 'Kardus (7.5 kg)', 15000.0);
