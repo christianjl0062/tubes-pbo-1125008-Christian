@@ -34,10 +34,12 @@ public class BankSampahView implements DataObserver{
         nasabahPanel = new NasabahPanel();
         petugasPanel = new PetugasPanel();
         adminPanel = new AdminPanel();
+
         mainContainer.add(loginPanel, "LOGIN_CARD");
         mainContainer.add(nasabahPanel, "NASABAH_CARD");
         mainContainer.add(petugasPanel, "PETUGAS_CARD");
         mainContainer.add(adminPanel, "ADMIN_CARD");
+        
         frame.add(mainContainer);
         frame.setSize(650, 420);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
