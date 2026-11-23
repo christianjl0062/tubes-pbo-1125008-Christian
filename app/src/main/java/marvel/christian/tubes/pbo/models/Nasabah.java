@@ -1,5 +1,7 @@
 package marvel.christian.tubes.pbo.models;
 
+import marvel.christian.tubes.pbo.exception.SaldoTidakCukupException;
+
 // Bagian Marvel
 public class Nasabah extends User {
     private double saldo;
@@ -7,6 +9,13 @@ public class Nasabah extends User {
     public Nasabah(String idUser, String username, String password, String namaLengkap) {
         super(idUser, username, password, namaLengkap, "NASABAH");
         this.saldo = 0.0;
+    }
+
+    public void tarikSaldo(double nominal) throws SaldoTidakCukupException {
+        if (nominal > this.saldo) {
+            throw new SaldoTidakCukupException("Saldo tidak cukup untuk penukaran!");
+        }
+        this.saldo -= nominal;
     }
 
     @Override

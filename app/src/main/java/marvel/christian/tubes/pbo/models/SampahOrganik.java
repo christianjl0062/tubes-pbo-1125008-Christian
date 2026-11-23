@@ -1,6 +1,6 @@
 package marvel.christian.tubes.pbo.models;
 
-// Christian
+// Bagian Marvel
 public class SampahOrganik extends Sampah {
     private int estimasiHariBusuk; 
     

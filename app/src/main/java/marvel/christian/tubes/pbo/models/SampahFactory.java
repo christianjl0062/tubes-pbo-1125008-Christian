@@ -2,6 +2,7 @@ package marvel.christian.tubes.pbo.models;
 
 import marvel.christian.tubes.pbo.exception.BankSampahException;
 
+// Bagian Christian
 public class SampahFactory {
     public Sampah buatSampah(String jenisSampah) throws BankSampahException {
         Sampah hasil;

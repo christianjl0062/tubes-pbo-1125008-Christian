@@ -1,7 +1,5 @@
 package marvel.christian.tubes.pbo.controller;
 
-import java.util.List;
-
 import marvel.christian.tubes.pbo.database.TransaksiRepository;
 import marvel.christian.tubes.pbo.database.UserRepository;
 import marvel.christian.tubes.pbo.exception.BankSampahException;
@@ -26,6 +24,9 @@ public class BankSampahController {
         this.view = view;
         eventLogin();
         eventNasabah();
+        eventPetugas();
+        eventAdmin();
+        eventLogout();
     }
 
     public void initAppEvents() {
@@ -116,5 +117,78 @@ public class BankSampahController {
             }
         });
     }
-    
+
+    private void eventPetugas() {
+        view.getPetugasPanel().getBtnSetorSampah().addActionListener(e -> {
+            String jenisSampah = view.getPetugasPanel().getSelectedJenisSampah();
+            String beratInput = view.getPetugasPanel().getBeratKgInput();
+
+            if (beratInput.isEmpty()) {
+                view.getPetugasPanel().setStatusPetugas("Berat sampah gak boleh kosong!");
+            } else {
+                try {
+                    double beratKg = Double.parseDouble(beratInput);
+                    if (beratKg <= 0) {
+                        view.getPetugasPanel().setStatusPetugas("Berat sampah harus lebih dari 0 kg!");
+                    } else {
+                        SampahFactory factory = new SampahFactory();
+                        Sampah sampah = factory.buatSampah(jenisSampah);
+
+                        if (sampah instanceof Recycleable) {
+                            view.getPetugasPanel().setInfoDaurUlang(((Recycleable) sampah).recycleSampah());
+                        } else {
+                            view.getPetugasPanel().setInfoDaurUlang(sampah.infoSampah());
+                        }
+
+                        double hargaAkhir = strategiHarga.calculateFinalPrice(sampah.hitungHarga(beratKg));
+                        Nasabah nasabahTarget = UserRepository.getNasabahByUsername("nasabah");
+
+                        if (nasabahTarget == null) {
+                            view.getPetugasPanel().setStatusPetugas("Akun nasabah tujuan tidak ditemukan!");
+                        } else {
+                            UserRepository.updateSaldo(nasabahTarget.getUsername(), nasabahTarget.getSaldo() + hargaAkhir);
+                            TransaksiRepository.addTransaksi(nasabahTarget.getUsername(), "SETOR_SAMPAH", jenisSampah + " (" + beratKg + " kg)", hargaAkhir);
+
+                            view.getPetugasPanel().clearBeratKg();
+                            view.getPetugasPanel().setStatusPetugas("Setoran berhasil! Total: Rp " + hargaAkhir);
+                            view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                        }
+                    }
+                } catch (NumberFormatException ex) {
+                    view.getPetugasPanel().setStatusPetugas("Berat sampah harus berupa angka!");
+                } catch (BankSampahException ex) {
+                    view.getPetugasPanel().setStatusPetugas(ex.getMessage());
+                }
+            }
+        });
+    }
+
+    private void eventAdmin() {
+        view.getAdminPanel().getBtnSimpanStrategi().addActionListener(e -> {
+            String pilihan = view.getAdminPanel().getSelectedStrategi();
+
+            if ("Harga Bonus".equalsIgnoreCase(pilihan)) {
+                String bonusStr = view.getAdminPanel().getBonusPersenInput();
+                if (bonusStr.isEmpty()) {
+                    view.getAdminPanel().setStatusAdmin("Persentase bonus tidak boleh kosong!");
+                } else {
+                    try {
+                        double persenBonus = Double.parseDouble(bonusStr);
+                        if (persenBonus < 0) {
+                            view.getAdminPanel().setStatusAdmin("Persentase bonus tidak boleh negatif!");
+                        } else {
+                            this.strategiHarga = new HargaBonusStrategy(persenBonus);
+                            view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Bonus (" + persenBonus + "%)");
+                        }
+                    } catch (NumberFormatException ex) {
+                        view.getAdminPanel().setStatusAdmin("Persentase bonus harus berupa angka!");
+                    }
+                }
+            } else {
+                this.strategiHarga = new HargaNormalStrategy();
+                view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Normal");
+            }
+        });
+    }
+
 }
