@@ -29,26 +29,6 @@ public class BankSampahController {
         eventLogout();
     }
 
-    public void initAppEvents() {
-        view.getLoginPanel().getBtnLogin().addActionListener(e -> {
-            String user = view.getLoginPanel().getUsernameInput();
-            String userPassword = view.getLoginPanel().getPasswordInput();
-
-            if (user.isEmpty() || userPassword.isEmpty()) {
-                view.getLoginPanel().setStatusLogin("Username dan password gak boleh kosong!");
-            } else {
-                User userLogin = UserRepository.login(user, userPassword);
-                
-                if (userLogin == null) {
-                    view.getLoginPanel().setStatusLogin("Username atau password salah!");
-                } else {
-                    this.currentUser = userLogin;
-                    view.getLoginPanel().resetForm();
-                }
-            }
-        });
-    }
-
     private void eventLogin() {
         view.getLoginPanel().getBtnLogin().addActionListener(e -> {
             String user = view.getLoginPanel().getUsernameInput();
@@ -191,4 +171,23 @@ public class BankSampahController {
         });
     }
 
+    private void eventLogout() {
+        view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.getNasabahPanel().setStatusNasabah(" ");
+            view.showCard("LOGIN_CARD");
+        });
+
+        view.getPetugasPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.getPetugasPanel().setStatusPetugas(" ");
+            view.showCard("LOGIN_CARD");
+        });
+
+        view.getAdminPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.showCard("LOGIN_CARD");
+        });
+    }
+    
 }
