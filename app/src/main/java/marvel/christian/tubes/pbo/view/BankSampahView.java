@@ -26,7 +26,7 @@ public class BankSampahView implements DataObserver{
     private AdminPanel adminPanel;
 
     public BankSampahView() {
-        frame = new JFrame("Bank Sampah Digital - ");
+        frame = new JFrame("Bank Sampah Digital - EcoTrashBank");
         cardLayout = new CardLayout();
         mainContainer = new JPanel(cardLayout);
 
