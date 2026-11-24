@@ -109,5 +109,47 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+
+    public static boolean isUsernameExists(String username) {
+        String sql = "SELECT username FROM users WHERE username = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet resultSet = stmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean register(String username, String password, String nama, String role) {
+        String sql = "INSERT INTO users (username, password, nama, role, saldo) VALUES (?, ?, ?, ?, 0.0)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, nama);
+            stmt.setString(4, role.toUpperCase());
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteUser(String username) {
+        String sql = "DELETE FROM users WHERE username = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
