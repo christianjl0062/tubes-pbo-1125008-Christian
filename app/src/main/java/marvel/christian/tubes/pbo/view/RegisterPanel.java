@@ -22,8 +22,7 @@ public class RegisterPanel extends JPanel {
     public RegisterPanel() {
         setLayout(new GridLayout(5, 1, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-        
-        add(new JLabel("Silahkan Anda Login Dulu.", SwingConstants.CENTER));
+        add(new JLabel("Pendaftaran Akun Baru", SwingConstants.CENTER));
 
         txtUsername = new JTextField();
         txtUsername.setBorder(BorderFactory.createTitledBorder("Username"));
@@ -33,6 +32,8 @@ public class RegisterPanel extends JPanel {
         txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
         add(txtPassword);
 
+        String[] pilihanRole = {"NASABAH", "PETUGAS", "ADMIN"};
+        
         labelStatusLogin = new JLabel(" ", SwingConstants.CENTER);
         add(labelStatusLogin);
 
@@ -70,8 +71,10 @@ public class RegisterPanel extends JPanel {
     }
 
     public void resetForm() {
+        txtNama.setText("");
         txtUsername.setText("");
         txtPassword.setText("");
-        labelStatusLogin.setText(" ");
+        comboRole.setSelectedIndex(0);
+        labelStatusRegister.setText(" ");
     }
 }
