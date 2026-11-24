@@ -8,8 +8,6 @@ import marvel.christian.tubes.pbo.view.BankSampahView;
 
 public class App {
     public static void main(String[] args) {
-        // Maaf kalau isi main nya cuma begini. (sudah kel kita usahain biar ikut mvc)
-
         BankSampahView view = new BankSampahView();
         new BankSampahController(view);
     }

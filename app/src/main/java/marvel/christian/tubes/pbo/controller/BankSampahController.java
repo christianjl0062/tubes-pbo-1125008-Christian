@@ -29,7 +29,7 @@ public class BankSampahController {
         eventLogout();
     }
 
-    private void eventLogin() {
+    public void eventLogin() {
         view.getLoginPanel().getBtnLogin().addActionListener(e -> {
             String user = view.getLoginPanel().getUsernameInput();
             String pass = view.getLoginPanel().getPasswordInput();
@@ -49,14 +49,20 @@ public class BankSampahController {
                         Nasabah n = (Nasabah) userLogin;
                         view.getNasabahPanel().setInfoUser("Dashboard Nasabah - " + n.getNamaLengkap());
                         view.getNasabahPanel().setSaldoText(n.getSaldo());
+                        view.getNasabahPanel().setStatusNasabah(" ");
+                        view.getNasabahPanel().clearJumlahTukar();
                         view.getNasabahPanel().setRiwayatText(String.join("\n", TransaksiRepository.getTransaksiByUsername(n.getUsername())));
                         view.showCard("NASABAH_CARD");
                     } else if (userLogin.getRole().equalsIgnoreCase("PETUGAS")) {
                         view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + userLogin.getNamaLengkap());
+                        view.getPetugasPanel().setStatusPetugas(" ");
+                        view.getPetugasPanel().setInfoDaurUlang("");
+                        view.getPetugasPanel().clearBeratKg();
                         view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
                         view.showCard("PETUGAS_CARD");
                     } else {
                         view.getAdminPanel().setInfoUser("Dashboard Admin - " + userLogin.getNamaLengkap());
+                        view.getAdminPanel().setStatusAdmin(" ");
                         view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
                         view.showCard("ADMIN_CARD");
                     }
@@ -98,7 +104,7 @@ public class BankSampahController {
         });
     }
 
-    private void eventPetugas() {
+    public void eventPetugas() {
         view.getPetugasPanel().getBtnSetorSampah().addActionListener(e -> {
             String jenisSampah = view.getPetugasPanel().getSelectedJenisSampah();
             String beratInput = view.getPetugasPanel().getBeratKgInput();
@@ -121,7 +127,7 @@ public class BankSampahController {
                         }
 
                         double hargaAkhir = strategiHarga.calculateFinalPrice(sampah.hitungHarga(beratKg));
-                        Nasabah nasabahTarget = UserRepository.getNasabahByUsername("nasabah");
+                        Nasabah nasabahTarget = UserRepository.getNasabahByUsername("tonob82");
 
                         if (nasabahTarget == null) {
                             view.getPetugasPanel().setStatusPetugas("Akun nasabah tujuan tidak ditemukan!");
@@ -143,7 +149,7 @@ public class BankSampahController {
         });
     }
 
-    private void eventAdmin() {
+    public void eventAdmin() {
         view.getAdminPanel().getBtnSimpanStrategi().addActionListener(e -> {
             String pilihan = view.getAdminPanel().getSelectedStrategi();
 
@@ -171,7 +177,7 @@ public class BankSampahController {
         });
     }
 
-    private void eventLogout() {
+    public void eventLogout() {
         view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
             view.getNasabahPanel().setStatusNasabah(" ");
@@ -181,13 +187,14 @@ public class BankSampahController {
         view.getPetugasPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
             view.getPetugasPanel().setStatusPetugas(" ");
+            view.getPetugasPanel().setInfoDaurUlang("");
             view.showCard("LOGIN_CARD");
         });
 
         view.getAdminPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
+            view.getAdminPanel().setStatusAdmin(" ");
             view.showCard("LOGIN_CARD");
         });
     }
-    
 }
