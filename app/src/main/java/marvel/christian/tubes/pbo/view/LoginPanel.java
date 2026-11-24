@@ -15,6 +15,7 @@ public class LoginPanel extends JPanel {
     private JButton btnLogin;
     private JLabel labelStatusLogin;
 
+    // bagian Christian.
     public LoginPanel() {
         setLayout(new GridLayout(5, 1, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
@@ -36,6 +37,8 @@ public class LoginPanel extends JPanel {
         add(btnLogin);
 
     }
+
+    // bagian Marvel
     public String getUsernameInput() {
         return txtUsername.getText();
     }

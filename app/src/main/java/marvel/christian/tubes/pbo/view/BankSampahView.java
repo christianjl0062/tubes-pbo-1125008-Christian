@@ -47,8 +47,6 @@ public class BankSampahView implements DataObserver{
         frame.setVisible(true);
     }
 
-    
-
     @Override
     public void updateRiwayatData(List<String> daftarRiwayat) {
         if (daftarRiwayat != null) {

@@ -24,21 +24,30 @@ public class RegisterPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
         add(new JLabel("Pendaftaran Akun Baru", SwingConstants.CENTER));
 
+        txtNama = new JTextField();
+        txtNama.setBorder(BorderFactory.createTitledBorder("Nama Lengkap"));
+        add(txtNama);
         txtUsername = new JTextField();
-        txtUsername.setBorder(BorderFactory.createTitledBorder("Username"));
+        txtUsername.setBorder(BorderFactory.createTitledBorder("Username Baru"));
         add(txtUsername);
-
         txtPassword = new JPasswordField();
-        txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
+        txtPassword.setBorder(BorderFactory.createTitledBorder("Password Baru"));
         add(txtPassword);
 
         String[] pilihanRole = {"NASABAH", "PETUGAS", "ADMIN"};
-        
-        labelStatusLogin = new JLabel(" ", SwingConstants.CENTER);
-        add(labelStatusLogin);
+        comboRole = new JComboBox<>(pilihanRole);
+        comboRole.setBorder(BorderFactory.createTitledBorder("Pilih Role Akun"));
+        add(comboRole);
 
-        btnLogin = new JButton("Masuk Ke App Bank Sampah");
-        add(btnLogin);
+        labelStatusRegister = new JLabel(" ", SwingConstants.CENTER);
+        add(labelStatusRegister);
+
+        JPanel panelTombol = new JPanel(new GridLayout(1, 2, 10, 0));
+        btnDaftar = new JButton("Daftar Sekarang");
+        btnKembaliLogin = new JButton("Kembali ke Login");
+        panelTombol.add(btnDaftar);
+        panelTombol.add(btnKembaliLogin);
+        add(panelTombol);
 
     }
     

@@ -27,6 +27,49 @@ public class BankSampahController {
         eventPetugas();
         eventAdmin();
         eventLogout();
+        eventRegister();
+    }
+
+    public void eventLogin() {
+        view.getLoginPanel().getBtnLogin().addActionListener(e -> {
+            String user = view.getLoginPanel().getUsernameInput();
+            String pass = view.getLoginPanel().getPasswordInput();
+
+            if (user.isEmpty() || pass.isEmpty()) {
+                view.getLoginPanel().setStatusLogin("Username dan password gak boleh kosong!");
+            } else {
+                User userLogin = UserRepository.login(user, pass);
+                if (userLogin == null) {
+                    view.getLoginPanel().setStatusLogin("Username atau password salah!");
+                } else {
+                    DataContainer<User> hasilLogin = new DataContainer<>(userLogin, "Login berhasil");
+                    this.currentUser = hasilLogin.getIsiData();
+                    view.getLoginPanel().resetForm();
+
+                    if (userLogin.getRole().equalsIgnoreCase("NASABAH")) {
+                        Nasabah n = (Nasabah) userLogin;
+                        view.getNasabahPanel().setInfoUser("Dashboard Nasabah - " + n.getNamaLengkap());
+                        view.getNasabahPanel().setSaldoText(n.getSaldo());
+                        view.getNasabahPanel().setStatusNasabah(" ");
+                        view.getNasabahPanel().clearJumlahTukar();
+                        view.getNasabahPanel().setRiwayatText(String.join("\n", TransaksiRepository.getTransaksiByUsername(n.getUsername())));
+                        view.showCard("NASABAH_CARD");
+                    } else if (userLogin.getRole().equalsIgnoreCase("PETUGAS")) {
+                        view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + userLogin.getNamaLengkap());
+                        view.getPetugasPanel().setStatusPetugas(" ");
+                        view.getPetugasPanel().setInfoDaurUlang("");
+                        view.getPetugasPanel().clearBeratKg();
+                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                        view.showCard("PETUGAS_CARD");
+                    } else {
+                        view.getAdminPanel().setInfoUser("Dashboard Admin - " + userLogin.getNamaLengkap());
+                        view.getAdminPanel().setStatusAdmin(" ");
+                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                        view.showCard("ADMIN_CARD");
+                    }
+                }
+            }
+        });
     }
 
     public void eventLogin() {
@@ -103,6 +146,8 @@ public class BankSampahController {
             }
         });
     }
+
+    
 
     public void eventPetugas() {
         view.getPetugasPanel().getBtnSetorSampah().addActionListener(e -> {
