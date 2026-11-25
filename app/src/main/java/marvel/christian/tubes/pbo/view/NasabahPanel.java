@@ -18,6 +18,7 @@ public class NasabahPanel extends JPanel {
     private JTextField txtJumlahTukar;
     private JButton btnTukarUang;
     private JButton btnLogout;
+    private JButton btnHapusAkun;
     private JTextArea txtRiwayat;
 
     public NasabahPanel() {
@@ -39,12 +40,17 @@ public class NasabahPanel extends JPanel {
         txtJumlahTukar.setBorder(BorderFactory.createTitledBorder("Nominal Penukaran (Rp)"));
         btnTukarUang = new JButton("Tukar Ke Uang Tunai");
         lblStatusNasabah = new JLabel(" ");
+
+        JPanel panelAksiAkun = new JPanel(new GridLayout(1, 2, 8, 0));
         btnLogout = new JButton("Logout");
+        btnHapusAkun = new JButton("Hapus Akun");
+        panelAksiAkun.add(btnLogout);
+        panelAksiAkun.add(btnHapusAkun);
 
         formTukarPanel.add(txtJumlahTukar);
         formTukarPanel.add(btnTukarUang);
         formTukarPanel.add(lblStatusNasabah);
-        formTukarPanel.add(btnLogout);
+        formTukarPanel.add(panelAksiAkun);
 
         txtRiwayat = new JTextArea();
         txtRiwayat.setEditable(false);
@@ -55,7 +61,6 @@ public class NasabahPanel extends JPanel {
         centerPanel.add(scrollRiwayat);
         add(centerPanel, BorderLayout.CENTER);
     }
-
 
     public void setInfoUser(String info) {
         lblInfoUser.setText(info);
@@ -83,6 +88,10 @@ public class NasabahPanel extends JPanel {
 
     public JButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public JButton getBtnHapusAkun() {
+        return btnHapusAkun;
     }
 
     public void setRiwayatText(String teks) {

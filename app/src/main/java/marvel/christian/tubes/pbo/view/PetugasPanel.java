@@ -19,6 +19,7 @@ public class PetugasPanel extends JPanel {
     private JTextField txtBeratKg;
     private JButton btnSetorSampah;
     private JButton btnLogout;
+    private JButton btnHapusAkun;
     private JTextArea txtInfoDaurUlang;
     private JTextArea txtRiwayat;
 
@@ -40,13 +41,18 @@ public class PetugasPanel extends JPanel {
         txtBeratKg.setBorder(BorderFactory.createTitledBorder("Berat Sampah (Kg)"));
         btnSetorSampah = new JButton("Proses Setoran");
         lblStatusPetugas = new JLabel(" ");
+
+        JPanel panelActionAkun = new JPanel(new GridLayout(1, 2, 8, 0));
         btnLogout = new JButton("Logout");
+        btnHapusAkun = new JButton("Hapus Akun");
+        panelActionAkun.add(btnLogout);
+        panelActionAkun.add(btnHapusAkun);
 
         formSetorPanel.add(comboJenisSampah);
         formSetorPanel.add(txtBeratKg);
         formSetorPanel.add(btnSetorSampah);
         formSetorPanel.add(lblStatusPetugas);
-        formSetorPanel.add(btnLogout);
+        formSetorPanel.add(panelActionAkun);
 
         JPanel rightPanel = new JPanel(new GridLayout(2, 1, 8, 8));
         txtInfoDaurUlang = new JTextArea();
@@ -99,6 +105,10 @@ public class PetugasPanel extends JPanel {
 
     public JButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public JButton getBtnHapusAkun() {
+        return btnHapusAkun;
     }
 
     public void setRiwayatText(String teks) {

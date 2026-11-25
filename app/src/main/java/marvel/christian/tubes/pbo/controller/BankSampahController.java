@@ -73,7 +73,7 @@ public class BankSampahController {
     }
 
     private void eventRegister() {
-        view.getLoginPanel().getBtnKeRegister().addActionListener(e -> {
+        view.getLoginPanel().getBtnRegisterAkun().addActionListener(e -> {
             view.getLoginPanel().resetForm();
             view.getRegisterPanel().resetForm();
             view.showCard("REGISTER_CARD");
@@ -220,6 +220,27 @@ public class BankSampahController {
     }
 
     public void eventLogout() {
+        view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.getNasabahPanel().setStatusNasabah(" ");
+            view.showCard("LOGIN_CARD");
+        });
+
+        view.getPetugasPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.getPetugasPanel().setStatusPetugas(" ");
+            view.getPetugasPanel().setInfoDaurUlang("");
+            view.showCard("LOGIN_CARD");
+        });
+
+        view.getAdminPanel().getBtnLogout().addActionListener(e -> {
+            this.currentUser = null;
+            view.getAdminPanel().setStatusAdmin(" ");
+            view.showCard("LOGIN_CARD");
+        });
+    }
+
+    public void eventDeleteAccount() {
         view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
             view.getNasabahPanel().setStatusNasabah(" ");
