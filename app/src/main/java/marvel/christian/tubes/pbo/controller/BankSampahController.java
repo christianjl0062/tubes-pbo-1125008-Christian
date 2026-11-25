@@ -85,7 +85,7 @@ public class BankSampahController {
         });
     }
 
-    private void eventRegister() {
+    public void eventRegister() {
         view.getLoginPanel().getBtnRegisterAkun().addActionListener(e -> {
             view.getLoginPanel().resetForm();
             view.getRegisterPanel().resetForm();
@@ -126,29 +126,38 @@ public class BankSampahController {
 
     public void eventNasabah() {
         view.getNasabahPanel().getBtnTukarUang().addActionListener(e -> {
+            view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
+
             if (currentUser instanceof Nasabah) {
                 Nasabah nasabah = (Nasabah) currentUser;
-                String inputTukar = view.getNasabahPanel().getJumlahTukarInput();
+                String inputTeks = view.getNasabahPanel().getJumlahTukarInput().trim();
 
-                if (inputTukar.isEmpty()) {
-                    view.getNasabahPanel().setStatusNasabah("Nominal penukaran gak boleh kosong!");
+                if (inputTeks.isEmpty()) {
+                    view.getNasabahPanel().setStatusNasabah("Nominal penukaran tidak boleh kosong!");
                 } else {
                     try {
-                        double nominalTukar = Double.parseDouble(inputTukar);
-                        if (nominalTukar <= 0) {
-                            view.getNasabahPanel().setStatusNasabah("Nominal harus lebih dari 0!");
+                        double nominal = Double.parseDouble(inputTeks);
+                        if (nominal <= 0) {
+                            view.getNasabahPanel().setStatusNasabah("Nominal harus lebih dari Rp 0!");
+                        } else if (nominal > nasabah.getSaldo()) {
+                            throw new SaldoTidakCukupException("Saldo tidak cukup! Saldo Anda: Rp " + nasabah.getSaldo());
                         } else {
-                            nasabah.tarikSaldo(nominalTukar);
+                            nasabah.tukarSaldoKeUang(nominal);
                             UserRepository.updateSaldo(nasabah.getUsername(), nasabah.getSaldo());
-                            TransaksiRepository.addTransaksi(nasabah.getUsername(), "TUKAR_SALDO", "Penarikan Tunai", nominalTukar);
+                            TransaksiRepository.addTransaksi(
+                                nasabah.getUsername(),
+                                "TUKAR_SALDO",
+                                "Penukaran Tunai",
+                                nominal
+                            );
 
                             view.getNasabahPanel().setSaldoText(nasabah.getSaldo());
                             view.getNasabahPanel().clearJumlahTukar();
-                            view.getNasabahPanel().setStatusNasabah("Berhasil tukar uang Rp " + nominalTukar);
-                            view.getNasabahPanel().setRiwayatText(String.join("\n", TransaksiRepository.getTransaksiByUsername(nasabah.getUsername())));
+                            view.getNasabahPanel().setStatusNasabah("Berhasil tukar Rp " + nominal + "!");
+                            notifyRiwayatObservers();
                         }
                     } catch (NumberFormatException ex) {
-                        view.getNasabahPanel().setStatusNasabah("Nominal harus berupa angka!");
+                        view.getNasabahPanel().setStatusNasabah("Input nominal harus berupa angka!");
                     } catch (SaldoTidakCukupException ex) {
                         view.getNasabahPanel().setStatusNasabah(ex.getMessage());
                     }
@@ -157,42 +166,51 @@ public class BankSampahController {
         });
     }
 
-    
-
     public void eventPetugas() {
         view.getPetugasPanel().getBtnSetorSampah().addActionListener(e -> {
-            String jenisSampah = view.getPetugasPanel().getSelectedJenisSampah();
-            String beratInput = view.getPetugasPanel().getBeratKgInput();
+            view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
 
-            if (beratInput.isEmpty()) {
-                view.getPetugasPanel().setStatusPetugas("Berat sampah gak boleh kosong!");
+            String jenisSampah = view.getPetugasPanel().getSelectedJenisSampah();
+            String inputBerat = view.getPetugasPanel().getBeratKgInput().trim();
+
+            if (inputBerat.isEmpty()) {
+                view.getPetugasPanel().setStatusPetugas("Berat sampah (Kg) tidak boleh kosong!");
             } else {
                 try {
-                    double beratKg = Double.parseDouble(beratInput);
+                    double beratKg = Double.parseDouble(inputBerat);
                     if (beratKg <= 0) {
-                        view.getPetugasPanel().setStatusPetugas("Berat sampah harus lebih dari 0 kg!");
+                        view.getPetugasPanel().setStatusPetugas("Berat sampah harus lebih dari 0 Kg!");
                     } else {
-                        SampahFactory factory = new SampahFactory();
-                        Sampah sampah = factory.buatSampah(jenisSampah);
-
-                        if (sampah instanceof Recycleable) {
-                            view.getPetugasPanel().setInfoDaurUlang(((Recycleable) sampah).recycleSampah());
+                        List<Nasabah> daftarNasabah = UserRepository.getAllNasabah();
+                        if (daftarNasabah.isEmpty()) {
+                            view.getPetugasPanel().setStatusPetugas("Tidak ada akun Nasabah di database!");
                         } else {
-                            view.getPetugasPanel().setInfoDaurUlang(sampah.infoSampah());
-                        }
+                            Nasabah nasabahTarget = daftarNasabah.get(0);
+                            SampahFactory factory = new SampahFactory();
+                            Sampah sampahObj = factory.createSampah(jenisSampah);
 
-                        double hargaAkhir = strategiHarga.calculateFinalPrice(sampah.hitungHarga(beratKg));
-                        Nasabah nasabahTarget = UserRepository.getNasabahByUsername("tonob82");
+                            double hargaDasar = sampahObj.hitungHarga(beratKg);
+                            double totalNilai = currentStrategy.calculateFinalPrice(hargaDasar);
+                            double saldoBaru = nasabahTarget.getSaldo() + totalNilai;
 
-                        if (nasabahTarget == null) {
-                            view.getPetugasPanel().setStatusPetugas("Akun nasabah tujuan tidak ditemukan!");
-                        } else {
-                            UserRepository.updateSaldo(nasabahTarget.getUsername(), nasabahTarget.getSaldo() + hargaAkhir);
-                            TransaksiRepository.addTransaksi(nasabahTarget.getUsername(), "SETOR_SAMPAH", jenisSampah + " (" + beratKg + " kg)", hargaAkhir);
+                            UserRepository.updateSaldo(nasabahTarget.getUsername(), saldoBaru);
+                            TransaksiRepository.addTransaksi(
+                                nasabahTarget.getUsername(),
+                                "SETOR_SAMPAH",
+                                jenisSampah + " (" + beratKg + " Kg)",
+                                totalNilai
+                            );
+
+                            if (sampahObj instanceof Recycleable) {
+                                Recycleable itemDaurUlang = (Recycleable) sampahObj;
+                                view.getPetugasPanel().setInfoDaurUlang(itemDaurUlang.recycleSampah());
+                            }
 
                             view.getPetugasPanel().clearBeratKg();
-                            view.getPetugasPanel().setStatusPetugas("Setoran berhasil! Total: Rp " + hargaAkhir);
-                            view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                            view.getPetugasPanel().setStatusPetugas(
+                                "Setoran " + nasabahTarget.getUsername() + " sukses! +Rp " + totalNilai
+                            );
+                            notifyRiwayatObservers();
                         }
                     }
                 } catch (NumberFormatException ex) {
@@ -206,35 +224,33 @@ public class BankSampahController {
 
     public void eventAdmin() {
         view.getAdminPanel().getBtnSimpanStrategi().addActionListener(e -> {
-            String pilihan = view.getAdminPanel().getSelectedStrategi();
+            view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
 
-            if ("Harga Bonus".equalsIgnoreCase(pilihan)) {
-                String bonusStr = view.getAdminPanel().getBonusPersenInput();
-                if (bonusStr.isEmpty()) {
-                    view.getAdminPanel().setStatusAdmin("Persentase bonus tidak boleh kosong!");
-                } else {
-                    try {
-                        double persenBonus = Double.parseDouble(bonusStr);
-                        if (persenBonus < 0) {
-                            view.getAdminPanel().setStatusAdmin("Persentase bonus tidak boleh negatif!");
-                        } else {
-                            this.strategiHarga = new HargaBonusStrategy(persenBonus);
-                            view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Bonus (" + persenBonus + "%)");
-                        }
-                    } catch (NumberFormatException ex) {
-                        view.getAdminPanel().setStatusAdmin("Persentase bonus harus berupa angka!");
-                    }
-                }
-            } else {
-                this.strategiHarga = new HargaNormalStrategy();
+            String pilihanStrategi = view.getAdminPanel().getSelectedStrategi();
+            if ("Harga Normal".equals(pilihanStrategi)) {
+                this.currentStrategy = new HargaNormalStrategy();
                 view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Normal");
+            } else {
+                String inputBonus = view.getAdminPanel().getBonusPersenInput().trim();
+                try {
+                    double persenBonus = Double.parseDouble(inputBonus);
+                    if (persenBonus < 0) {
+                        view.getAdminPanel().setStatusAdmin("Persentase bonus tidak boleh negatif!");
+                    } else {
+                        this.currentStrategy = new HargaBonusStrategy(persenBonus);
+                        view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Bonus (+" + persenBonus + "%)");
+                    }
+                } catch (NumberFormatException ex) {
+                    view.getAdminPanel().setStatusAdmin("Persentase bonus harus berupa angka!");
+                }
             }
         });
     }
 
-    private void eventLogout() {
+    public void eventLogout() {
         view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
+            view.getNasabahPanel().clearJumlahTukar();
             view.getNasabahPanel().setStatusNasabah(" ");
             view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
@@ -242,6 +258,7 @@ public class BankSampahController {
 
         view.getPetugasPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
+            view.getPetugasPanel().clearBeratKg();
             view.getPetugasPanel().setStatusPetugas(" ");
             view.getPetugasPanel().setInfoDaurUlang("");
             view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
@@ -250,7 +267,6 @@ public class BankSampahController {
 
         view.getAdminPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
-            view.getAdminPanel().setStatusAdmin(" ");
             view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
         });
@@ -260,14 +276,15 @@ public class BankSampahController {
         view.getNasabahPanel().getBtnHapusAkun().addActionListener(e -> {
             if (currentUser != null) {
                 if (view.getNasabahPanel().getBtnHapusAkun().getText().equals("Hapus Akun")) {
-                    view.getNasabahPanel().getBtnHapusAkun().setText("Yakin Hapus? Coba Pikirkan lagi.");
-                    view.getNasabahPanel().setStatusNasabah("Klik 'Yakin Hapus?' untuk hapus akun anda.");
+                    view.getNasabahPanel().getBtnHapusAkun().setText("Yakin Hapus?");
+                    view.getNasabahPanel().setStatusNasabah("Klik 'Yakin Hapus?' lagi untuk hapus akun!");
                 } else {
                     String usernameDihapus = currentUser.getUsername();
                     boolean berhasil = UserRepository.deleteUser(usernameDihapus);
                     view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
                     if (berhasil) {
                         this.currentUser = null;
+                        view.getNasabahPanel().clearJumlahTukar();
                         view.getLoginPanel().resetForm();
                         view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");
                         view.showCard("LOGIN_CARD");
@@ -289,6 +306,7 @@ public class BankSampahController {
                     view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
                     if (berhasil) {
                         this.currentUser = null;
+                        view.getPetugasPanel().clearBeratKg();
                         view.getLoginPanel().resetForm();
                         view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");
                         view.showCard("LOGIN_CARD");
