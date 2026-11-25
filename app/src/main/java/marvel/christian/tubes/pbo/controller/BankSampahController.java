@@ -72,42 +72,39 @@ public class BankSampahController {
         });
     }
 
-    public void eventLogin() {
-        view.getLoginPanel().getBtnLogin().addActionListener(e -> {
-            String user = view.getLoginPanel().getUsernameInput();
-            String pass = view.getLoginPanel().getPasswordInput();
+    private void eventRegister() {
+        view.getLoginPanel().getBtnKeRegister().addActionListener(e -> {
+            view.getLoginPanel().resetForm();
+            view.getRegisterPanel().resetForm();
+            view.showCard("REGISTER_CARD");
+        });
 
-            if (user.isEmpty() || pass.isEmpty()) {
-                view.getLoginPanel().setStatusLogin("Username dan password gak boleh kosong!");
+        view.getRegisterPanel().getBtnKembaliLogin().addActionListener(e -> {
+            view.getRegisterPanel().resetForm();
+            view.getLoginPanel().resetForm();
+            view.showCard("LOGIN_CARD");
+        });
+
+        view.getRegisterPanel().getBtnDaftar().addActionListener(e -> {
+            String nama = view.getRegisterPanel().getNamaInput();
+            String username = view.getRegisterPanel().getUsernameInput();
+            String password = view.getRegisterPanel().getPasswordInput();
+            String role = view.getRegisterPanel().getSelectedRole();
+
+            if (nama.isEmpty() || username.isEmpty() || password.isEmpty()) {
+                view.getRegisterPanel().setStatusRegister("Nama, username, dan password tidak boleh kosong!");
             } else {
-                User userLogin = UserRepository.login(user, pass);
-                if (userLogin == null) {
-                    view.getLoginPanel().setStatusLogin("Username atau password salah!");
+                if (UserRepository.isUsernameExists(username)) {
+                    view.getRegisterPanel().setStatusRegister("Username '" + username + "' sudah dipakai!");
                 } else {
-                    DataContainer<User> hasilLogin = new DataContainer<>(userLogin, "Login berhasil");
-                    this.currentUser = hasilLogin.getIsiData();
-                    view.getLoginPanel().resetForm();
-
-                    if (userLogin.getRole().equalsIgnoreCase("NASABAH")) {
-                        Nasabah n = (Nasabah) userLogin;
-                        view.getNasabahPanel().setInfoUser("Dashboard Nasabah - " + n.getNamaLengkap());
-                        view.getNasabahPanel().setSaldoText(n.getSaldo());
-                        view.getNasabahPanel().setStatusNasabah(" ");
-                        view.getNasabahPanel().clearJumlahTukar();
-                        view.getNasabahPanel().setRiwayatText(String.join("\n", TransaksiRepository.getTransaksiByUsername(n.getUsername())));
-                        view.showCard("NASABAH_CARD");
-                    } else if (userLogin.getRole().equalsIgnoreCase("PETUGAS")) {
-                        view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + userLogin.getNamaLengkap());
-                        view.getPetugasPanel().setStatusPetugas(" ");
-                        view.getPetugasPanel().setInfoDaurUlang("");
-                        view.getPetugasPanel().clearBeratKg();
-                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
-                        view.showCard("PETUGAS_CARD");
+                    boolean berhasil = UserRepository.register(username, password, nama, role);
+                    if (berhasil) {
+                        view.getRegisterPanel().resetForm();
+                        view.getLoginPanel().resetForm();
+                        view.getLoginPanel().setStatusLogin("Akun '" + username + "' berhasil dibuat! Silakan login.");
+                        view.showCard("LOGIN_CARD");
                     } else {
-                        view.getAdminPanel().setInfoUser("Dashboard Admin - " + userLogin.getNamaLengkap());
-                        view.getAdminPanel().setStatusAdmin(" ");
-                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
-                        view.showCard("ADMIN_CARD");
+                        view.getRegisterPanel().setStatusRegister("Gagal mendaftarkan akun ke database!");
                     }
                 }
             }

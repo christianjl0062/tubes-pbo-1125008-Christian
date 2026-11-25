@@ -1,4 +1,5 @@
 package marvel.christian.tubes.pbo.view;
+
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -13,32 +14,30 @@ public class LoginPanel extends JPanel {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
+    private JButton btnRegisterAkun;
     private JLabel labelStatusLogin;
 
-    // bagian Christian.
     public LoginPanel() {
-        setLayout(new GridLayout(5, 1, 10, 10));
-        setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-        
+        setLayout(new GridLayout(6, 1, 10, 10));
+        setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         add(new JLabel("Silahkan Anda Login Dulu.", SwingConstants.CENTER));
 
         txtUsername = new JTextField();
         txtUsername.setBorder(BorderFactory.createTitledBorder("Username"));
         add(txtUsername);
-
         txtPassword = new JPasswordField();
         txtPassword.setBorder(BorderFactory.createTitledBorder("Password"));
         add(txtPassword);
 
         labelStatusLogin = new JLabel(" ", SwingConstants.CENTER);
         add(labelStatusLogin);
-
         btnLogin = new JButton("Masuk Ke App Bank Sampah");
         add(btnLogin);
-
+        btnRegisterAkun = new JButton("Buat Akun Baru");
+        add(btnRegisterAkun);
     }
 
-    // bagian Marvel
+    // Bagiannya marvel.
     public String getUsernameInput() {
         return txtUsername.getText();
     }
@@ -61,6 +60,10 @@ public class LoginPanel extends JPanel {
 
     public void setBtnLogin(JButton btnLogin) {
         this.btnLogin = btnLogin;
+    }
+
+    public JButton getBtnRegisterAkun() {
+        return btnRegisterAkun;
     }
 
     public JLabel getStatusLogin() {

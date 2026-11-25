@@ -1,4 +1,5 @@
 package marvel.christian.tubes.pbo.view;
+
 import java.awt.CardLayout;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.swing.JTextField;
 import marvel.christian.tubes.pbo.models.DataObserver;
 
 // bagian nya Christian.
-public class BankSampahView implements DataObserver{
+public class BankSampahView implements DataObserver {
     private JFrame frame;
     private CardLayout cardLayout;
     private JPanel mainContainer;
@@ -21,6 +22,7 @@ public class BankSampahView implements DataObserver{
     private JButton btnLogin;
     private JTextArea txtRiwayat;
     private LoginPanel loginPanel;
+    private RegisterPanel registerPanel;
     private NasabahPanel nasabahPanel;
     private PetugasPanel petugasPanel;
     private AdminPanel adminPanel;
@@ -31,17 +33,19 @@ public class BankSampahView implements DataObserver{
         mainContainer = new JPanel(cardLayout);
 
         loginPanel = new LoginPanel();
+        registerPanel = new RegisterPanel();
         nasabahPanel = new NasabahPanel();
         petugasPanel = new PetugasPanel();
         adminPanel = new AdminPanel();
 
         mainContainer.add(loginPanel, "LOGIN_CARD");
+        mainContainer.add(registerPanel, "REGISTER_CARD");
         mainContainer.add(nasabahPanel, "NASABAH_CARD");
         mainContainer.add(petugasPanel, "PETUGAS_CARD");
         mainContainer.add(adminPanel, "ADMIN_CARD");
-        
+
         frame.add(mainContainer);
-        frame.setSize(650, 420);
+        frame.setSize(650, 450);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -76,6 +80,10 @@ public class BankSampahView implements DataObserver{
 
     public AdminPanel getAdminPanel() {
         return adminPanel;
+    }
+
+    public RegisterPanel getRegisterPanel() {
+        return registerPanel;
     }
 
     public void showCard(String cardName) {
