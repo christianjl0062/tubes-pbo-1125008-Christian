@@ -11,7 +11,7 @@ public class Nasabah extends User {
         this.saldo = 0.0;
     }
 
-    public void tarikSaldo(double nominal) throws SaldoTidakCukupException {
+    public void tukarSaldoKeUang(double nominal) throws SaldoTidakCukupException {
         if (nominal > this.saldo) {
             throw new SaldoTidakCukupException("Saldo tidak cukup untuk penukaran!");
         }

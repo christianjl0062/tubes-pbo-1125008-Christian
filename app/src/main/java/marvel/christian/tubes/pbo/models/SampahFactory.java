@@ -4,7 +4,7 @@ import marvel.christian.tubes.pbo.exception.BankSampahException;
 
 // Bagian Christian
 public class SampahFactory {
-    public Sampah buatSampah(String jenisSampah) throws BankSampahException {
+    public Sampah createSampah(String jenisSampah) throws BankSampahException {
         Sampah hasil;
 
         if (jenisSampah == null || jenisSampah.isEmpty()) {

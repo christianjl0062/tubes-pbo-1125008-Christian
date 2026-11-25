@@ -1,10 +1,14 @@
 package marvel.christian.tubes.pbo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import marvel.christian.tubes.pbo.database.TransaksiRepository;
 import marvel.christian.tubes.pbo.database.UserRepository;
 import marvel.christian.tubes.pbo.exception.BankSampahException;
 import marvel.christian.tubes.pbo.exception.SaldoTidakCukupException;
 import marvel.christian.tubes.pbo.models.DataContainer;
+import marvel.christian.tubes.pbo.models.DataObserver;
 import marvel.christian.tubes.pbo.models.HargaBonusStrategy;
 import marvel.christian.tubes.pbo.models.HargaNormalStrategy;
 import marvel.christian.tubes.pbo.models.Nasabah;
@@ -17,57 +21,65 @@ import marvel.christian.tubes.pbo.view.BankSampahView;
 
 public class BankSampahController {
     private BankSampahView view;
-    private PricingStrategy strategiHarga = new HargaNormalStrategy();
     private User currentUser;
+    private PricingStrategy currentStrategy;
+    private List<DataObserver> observers;
 
     public BankSampahController(BankSampahView view) {
         this.view = view;
+        this.currentStrategy = new HargaNormalStrategy();
+        this.observers = new ArrayList<>();
+        this.observers.add(view);
         eventLogin();
+        eventRegister();
         eventNasabah();
         eventPetugas();
         eventAdmin();
         eventLogout();
-        eventRegister();
         eventDeleteAkun();
+    }
+
+    public void notifyRiwayatObservers() {
+        List<String> semuaRiwayat = TransaksiRepository.getAllTransaksi();
+        for (int i = 0; i < observers.size(); i++) {
+            observers.get(i).updateRiwayatData(semuaRiwayat);
+        }
     }
 
     public void eventLogin() {
         view.getLoginPanel().getBtnLogin().addActionListener(e -> {
-            String user = view.getLoginPanel().getUsernameInput();
-            String pass = view.getLoginPanel().getPasswordInput();
+            String username = view.getLoginPanel().getUsernameInput().trim();
+            String password = view.getLoginPanel().getPasswordInput();
 
-            if (user.isEmpty() || pass.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) {
                 view.getLoginPanel().setStatusLogin("Username dan password gak boleh kosong!");
             } else {
-                User userLogin = UserRepository.login(user, pass);
-                if (userLogin == null) {
-                    view.getLoginPanel().setStatusLogin("Username atau password salah!");
-                } else {
+                User userLogin = UserRepository.login(username, password);
+                if (userLogin != null) {
                     DataContainer<User> hasilLogin = new DataContainer<>(userLogin, "Login berhasil");
                     this.currentUser = hasilLogin.getIsiData();
                     view.getLoginPanel().resetForm();
+                    notifyRiwayatObservers();
 
-                    if (userLogin.getRole().equalsIgnoreCase("NASABAH")) {
-                        Nasabah n = (Nasabah) userLogin;
+                    if (currentUser.getRole().equalsIgnoreCase("NASABAH")) {
+                        Nasabah n = (Nasabah) currentUser;
                         view.getNasabahPanel().setInfoUser("Dashboard Nasabah - " + n.getNamaLengkap());
                         view.getNasabahPanel().setSaldoText(n.getSaldo());
                         view.getNasabahPanel().setStatusNasabah(" ");
-                        view.getNasabahPanel().clearJumlahTukar();
-                        view.getNasabahPanel().setRiwayatText(String.join("\n", TransaksiRepository.getTransaksiByUsername(n.getUsername())));
+                        view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("NASABAH_CARD");
-                    } else if (userLogin.getRole().equalsIgnoreCase("PETUGAS")) {
-                        view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + userLogin.getNamaLengkap());
+                    } else if (currentUser.getRole().equalsIgnoreCase("PETUGAS")) {
+                        view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + currentUser.getNamaLengkap());
                         view.getPetugasPanel().setStatusPetugas(" ");
-                        view.getPetugasPanel().setInfoDaurUlang("");
-                        view.getPetugasPanel().clearBeratKg();
-                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                        view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("PETUGAS_CARD");
-                    } else {
-                        view.getAdminPanel().setInfoUser("Dashboard Admin - " + userLogin.getNamaLengkap());
-                        view.getAdminPanel().setStatusAdmin(" ");
-                        view.updateRiwayatData(TransaksiRepository.getAllTransaksi());
+                    } else if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
+                        view.getAdminPanel().setInfoUser("Dashboard Admin - " + currentUser.getNamaLengkap());
+                        view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("ADMIN_CARD");
                     }
+                } else {
+                    view.getLoginPanel().setStatusLogin("Username atau password salah!");
                 }
             }
         });
@@ -94,25 +106,25 @@ public class BankSampahController {
 
             if (nama.isEmpty() || username.isEmpty() || password.isEmpty()) {
                 view.getRegisterPanel().setStatusRegister("Nama, username, dan password tidak boleh kosong!");
+            } else if (username.contains(" ")) {
+                view.getRegisterPanel().setStatusRegister("Username tidak boleh mengandung spasi!");
+            } else if (UserRepository.isUsernameExists(username)) {
+                view.getRegisterPanel().setStatusRegister("Username '" + username + "' sudah dipakai!");
             } else {
-                if (UserRepository.isUsernameExists(username)) {
-                    view.getRegisterPanel().setStatusRegister("Username '" + username + "' sudah dipakai!");
+                boolean berhasil = UserRepository.register(username, password, nama, role);
+                if (berhasil) {
+                    view.getRegisterPanel().resetForm();
+                    view.getLoginPanel().resetForm();
+                    view.getLoginPanel().setStatusLogin("Akun '" + username + "' berhasil dibuat! Silakan login.");
+                    view.showCard("LOGIN_CARD");
                 } else {
-                    boolean berhasil = UserRepository.register(username, password, nama, role);
-                    if (berhasil) {
-                        view.getRegisterPanel().resetForm();
-                        view.getLoginPanel().resetForm();
-                        view.getLoginPanel().setStatusLogin("Akun '" + username + "' berhasil dibuat! Silakan login.");
-                        view.showCard("LOGIN_CARD");
-                    } else {
-                        view.getRegisterPanel().setStatusRegister("Gagal mendaftarkan akun ke database!");
-                    }
+                    view.getRegisterPanel().setStatusRegister("Gagal mendaftarkan akun ke database!");
                 }
             }
         });
     }
 
-    private void eventNasabah() {
+    public void eventNasabah() {
         view.getNasabahPanel().getBtnTukarUang().addActionListener(e -> {
             if (currentUser instanceof Nasabah) {
                 Nasabah nasabah = (Nasabah) currentUser;
