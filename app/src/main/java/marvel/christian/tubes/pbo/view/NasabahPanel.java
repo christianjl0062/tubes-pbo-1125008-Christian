@@ -24,8 +24,8 @@ public class NasabahPanel extends JPanel {
     public NasabahPanel() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-        JPanel topPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+    
+        JPanel topPanel = new JPanel(new GridLayout(2, 1, 5, 5)); 
         lblInfoUser = new JLabel("Dashboard Nasabah");
         lblSaldo = new JLabel("Saldo Anda: Rp 0");
         topPanel.add(lblInfoUser);

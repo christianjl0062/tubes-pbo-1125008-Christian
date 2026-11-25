@@ -18,9 +18,15 @@ public class Nasabah extends User {
         this.saldo -= nominal;
     }
 
+    // override: bagian christian
     @Override
     public String getInfoHakAkses() {
         return "Hak Akses Nasabah ==> bisa nyetor sampah + lihat estimasi harganya.";
+    }
+
+    @Override
+    public String toString() {
+        return getNamaLengkap() + " (" + getUsername() + ") - Saldo: Rp " + saldo;
     }
 
     public double getSaldo() {

@@ -2,6 +2,7 @@ package marvel.christian.tubes.pbo.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import javax.swing.JTextField;
 public class PetugasPanel extends JPanel {
     private JLabel lblInfoUser;
     private JLabel lblStatusPetugas;
+    private JComboBox<String> comboNasabah;
     private JComboBox<String> comboJenisSampah;
     private JTextField txtBeratKg;
     private JButton btnSetorSampah;
@@ -29,11 +31,12 @@ public class PetugasPanel extends JPanel {
 
         lblInfoUser = new JLabel("Dashboard Petugas");
         add(lblInfoUser, BorderLayout.NORTH);
-
         JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-
-        JPanel formSetorPanel = new JPanel(new GridLayout(5, 1, 8, 8));
+        JPanel formSetorPanel = new JPanel(new GridLayout(6, 1, 8, 8));
         formSetorPanel.setBorder(BorderFactory.createTitledBorder("Input Setoran Sampah"));
+
+        comboNasabah = new JComboBox<>();
+        comboNasabah.setBorder(BorderFactory.createTitledBorder("Pilih Nasabah Tujuan"));
 
         String[] pilihanSampah = {"Botol Plastik", "Kardus", "Sisa Makanan"};
         comboJenisSampah = new JComboBox<>(pilihanSampah);
@@ -48,6 +51,7 @@ public class PetugasPanel extends JPanel {
         panelActionAkun.add(btnLogout);
         panelActionAkun.add(btnHapusAkun);
 
+        formSetorPanel.add(comboNasabah);
         formSetorPanel.add(comboJenisSampah);
         formSetorPanel.add(txtBeratKg);
         formSetorPanel.add(btnSetorSampah);
@@ -77,6 +81,20 @@ public class PetugasPanel extends JPanel {
 
     public void setInfoUser(String info) {
         lblInfoUser.setText(info);
+    }
+
+    public void setDaftarNasabah(List<String> listUsername) {
+        comboNasabah.removeAllItems();
+        for (int i = 0; i < listUsername.size(); i++) {
+            comboNasabah.addItem(listUsername.get(i));
+        }
+    }
+
+    public String getSelectedNasabah() {
+        if (comboNasabah.getSelectedItem() != null) {
+            return (String) comboNasabah.getSelectedItem();
+        }
+        return "";
     }
 
     public String getSelectedJenisSampah() {

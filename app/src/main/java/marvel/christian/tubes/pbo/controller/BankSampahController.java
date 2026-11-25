@@ -40,9 +40,11 @@ public class BankSampahController {
     }
 
     public void notifyRiwayatObservers() {
-        List<String> semuaRiwayat = TransaksiRepository.getAllTransaksi();
+        DataContainer<String> containerRiwayat = new DataContainer<>("Riwayat Transaksi Bank Sampah");
+        containerRiwayat.setRecords(TransaksiRepository.getAllTransaksi());
+
         for (int i = 0; i < observers.size(); i++) {
-            observers.get(i).updateRiwayatData(semuaRiwayat);
+            observers.get(i).updateRiwayatData(containerRiwayat.getAllRecords());
         }
     }
 
@@ -56,8 +58,10 @@ public class BankSampahController {
             } else {
                 User userLogin = UserRepository.login(username, password);
                 if (userLogin != null) {
-                    DataContainer<User> hasilLogin = new DataContainer<>(userLogin, "Login berhasil");
-                    this.currentUser = hasilLogin.getIsiData();
+                    DataContainer<User> hasilLogin = new DataContainer<>("Login berhasil");
+                    hasilLogin.addRecord(userLogin);
+                    this.currentUser = hasilLogin.getByIndex(0);
+
                     view.getLoginPanel().resetForm();
                     notifyRiwayatObservers();
 
@@ -68,11 +72,21 @@ public class BankSampahController {
                         view.getNasabahPanel().setStatusNasabah(" ");
                         view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("NASABAH_CARD");
+
                     } else if (currentUser.getRole().equalsIgnoreCase("PETUGAS")) {
+                        DataContainer<Nasabah> containerNasabah = new DataContainer<>("Daftar Nasabah");
+                        containerNasabah.setRecords(UserRepository.getAllNasabah());
+
+                        List<String> listUsername = new ArrayList<>();
+                        for (int i = 0; i < containerNasabah.getTotalRecords(); i++) {
+                            listUsername.add(containerNasabah.getByIndex(i).getUsername());
+                        }
+                        view.getPetugasPanel().setDaftarNasabah(listUsername);
                         view.getPetugasPanel().setInfoUser("Dashboard Petugas - " + currentUser.getNamaLengkap());
                         view.getPetugasPanel().setStatusPetugas(" ");
                         view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("PETUGAS_CARD");
+                        
                     } else if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
                         view.getAdminPanel().setInfoUser("Dashboard Admin - " + currentUser.getNamaLengkap());
                         if (currentStrategy instanceof HargaBonusStrategy) {
@@ -81,6 +95,17 @@ public class BankSampahController {
                             view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Normal");
                         }
                         view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
+                        
+                        DataContainer<Nasabah> containerNasabah 
+                        = new DataContainer<>("Daftar Nasabah Terdaftar");
+                        containerNasabah.setRecords(UserRepository.getAllNasabah());
+                        DataContainer<String> containerRiwayat 
+                        = new DataContainer<>("Semua Riwayat Transaksi");
+                        containerRiwayat.setRecords(TransaksiRepository.getAllTransaksi());
+
+                        String tampilanAdmin = containerNasabah.printAllData() 
+                        + "\n" + containerRiwayat.printAllData();
+                        view.getAdminPanel().setRiwayatText(tampilanAdmin);
                         view.showCard("ADMIN_CARD");
                     }
                 } else {
@@ -175,10 +200,13 @@ public class BankSampahController {
         view.getPetugasPanel().getBtnSetorSampah().addActionListener(e -> {
             view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
 
+            String usernameDipilih = view.getPetugasPanel().getSelectedNasabah();
             String jenisSampah = view.getPetugasPanel().getSelectedJenisSampah();
             String inputBerat = view.getPetugasPanel().getBeratKgInput().trim();
 
-            if (inputBerat.isEmpty()) {
+            if (usernameDipilih.isEmpty()) {
+                view.getPetugasPanel().setStatusPetugas("Tidak ada akun Nasabah yang dipilih!");
+            } else if (inputBerat.isEmpty()) {
                 view.getPetugasPanel().setStatusPetugas("Berat sampah (Kg) tidak boleh kosong!");
             } else {
                 try {
@@ -186,11 +214,20 @@ public class BankSampahController {
                     if (beratKg <= 0) {
                         view.getPetugasPanel().setStatusPetugas("Berat sampah harus lebih dari 0 Kg!");
                     } else {
-                        List<Nasabah> daftarNasabah = UserRepository.getAllNasabah();
-                        if (daftarNasabah.isEmpty()) {
-                            view.getPetugasPanel().setStatusPetugas("Tidak ada akun Nasabah di database!");
+                        DataContainer<Nasabah> containerNasabah = new DataContainer<>("Daftar Nasabah");
+                        containerNasabah.setRecords(UserRepository.getAllNasabah());
+
+                        Nasabah nasabahTarget = null;
+                        for (int i = 0; i < containerNasabah.getTotalRecords(); i++) {
+                            Nasabah kandidat = containerNasabah.getByIndex(i);
+                            if (kandidat.getUsername().equals(usernameDipilih)) {
+                                nasabahTarget = kandidat;
+                            }
+                        }
+
+                        if (nasabahTarget == null) {
+                            view.getPetugasPanel().setStatusPetugas("Akun Nasabah tidak ditemukan di database!");
                         } else {
-                            Nasabah nasabahTarget = daftarNasabah.get(0);
                             SampahFactory factory = new SampahFactory();
                             Sampah sampahObj = factory.createSampah(jenisSampah);
 
@@ -206,10 +243,13 @@ public class BankSampahController {
                                 totalNilai
                             );
 
+                            String teksInfo = "Info Sampah:\n" + sampahObj.infoSampah();
                             if (sampahObj instanceof Recycleable) {
                                 Recycleable itemDaurUlang = (Recycleable) sampahObj;
-                                view.getPetugasPanel().setInfoDaurUlang(itemDaurUlang.recycleSampah());
+                                teksInfo = teksInfo + "\n\nInstruksi Daur Ulang:\n" 
+                                + itemDaurUlang.recycleSampah();
                             }
+                            view.getPetugasPanel().setInfoDaurUlang(teksInfo);
 
                             view.getPetugasPanel().clearBeratKg();
                             view.getPetugasPanel().setStatusPetugas(
@@ -281,6 +321,7 @@ public class BankSampahController {
 
         view.getAdminPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
+            view.getAdminPanel().setStatusAdmin(" ");
             view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
         });

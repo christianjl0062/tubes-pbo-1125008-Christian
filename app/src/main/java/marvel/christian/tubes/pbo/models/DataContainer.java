@@ -17,15 +17,16 @@ public class DataContainer<T> {
         records.add(item);
     }
 
-    public void setRecords(List<T> dataBaru) {
-        this.records = dataBaru;
+    public void setRecords(List<T> newData) {
+        this.records = newData;
     }
 
     public T getByIndex(int index) {
         if (index >= 0 && index < records.size()) {
             return records.get(index);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public int getTotalRecords() {
@@ -44,7 +45,7 @@ public class DataContainer<T> {
         this.pesanStatus = pesanStatus;
     }
 
-    public String formatAllData() {
+    public String printAllData() {
         String hasil = pesanStatus + " (Total: " + records.size() + ")\n";
         for (int i = 0; i < records.size(); i++) {
             hasil = hasil + (i + 1) + ". " + records.get(i).toString() + "\n";

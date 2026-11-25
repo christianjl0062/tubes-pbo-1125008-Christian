@@ -28,9 +28,7 @@ public class AdminPanel extends JPanel {
 
         lblInfoUser = new JLabel("Dashboard Admin");
         add(lblInfoUser, BorderLayout.NORTH);
-
         JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-
         JPanel pengaturanPanel = new JPanel(new GridLayout(5, 1, 8, 8));
         pengaturanPanel.setBorder(BorderFactory.createTitledBorder("Pengaturan Strategi Harga"));
 
