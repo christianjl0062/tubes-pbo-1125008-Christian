@@ -38,9 +38,11 @@ public class AdminPanel extends JPanel {
         cmbStrategiHarga = new JComboBox<>(pilihanStrategi);
         txtBonusPersen = new JTextField("10");
         txtBonusPersen.setBorder(BorderFactory.createTitledBorder("Persentase Bonus (%)"));
+        txtBonusPersen.setEnabled(false);
+
         btnSimpanStrategi = new JButton("Terapkan Strategi");
         lblStatusAdmin = new JLabel("Strategi aktif: Harga Normal");
-
+        
         JPanel panelAksiAkun = new JPanel(new GridLayout(1, 2, 8, 0));
         btnLogout = new JButton("Logout");
         btnHapusAkun = new JButton("Hapus Akun");
@@ -93,5 +95,13 @@ public class AdminPanel extends JPanel {
 
     public void setRiwayatText(String teks) {
         txtRiwayat.setText(teks);
+    }
+
+    public JComboBox<String> getCmbStrategiHarga() {
+        return cmbStrategiHarga;
+    }
+
+    public JTextField getTxtBonusPersen() {
+        return txtBonusPersen;
     }
 }

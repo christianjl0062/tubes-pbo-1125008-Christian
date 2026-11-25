@@ -75,6 +75,11 @@ public class BankSampahController {
                         view.showCard("PETUGAS_CARD");
                     } else if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
                         view.getAdminPanel().setInfoUser("Dashboard Admin - " + currentUser.getNamaLengkap());
+                        if (currentStrategy instanceof HargaBonusStrategy) {
+                            view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Bonus");
+                        } else {
+                            view.getAdminPanel().setStatusAdmin("Strategi aktif: Harga Normal");
+                        }
                         view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
                         view.showCard("ADMIN_CARD");
                     }
@@ -223,6 +228,15 @@ public class BankSampahController {
     }
 
     public void eventAdmin() {
+        view.getAdminPanel().getCmbStrategiHarga().addActionListener(e -> {
+            String pilihan = view.getAdminPanel().getSelectedStrategi();
+            if ("Harga Bonus".equals(pilihan)) {
+                view.getAdminPanel().getTxtBonusPersen().setEnabled(true);
+            } else {
+                view.getAdminPanel().getTxtBonusPersen().setEnabled(false);
+            }
+        });
+
         view.getAdminPanel().getBtnSimpanStrategi().addActionListener(e -> {
             view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
 
