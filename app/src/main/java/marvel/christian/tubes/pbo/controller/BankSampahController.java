@@ -142,7 +142,7 @@ public class BankSampahController {
                 view.getRegisterPanel().setStatusRegister("Username '" + username + "' sudah dipakai!");
             } else {
                 boolean berhasil = UserRepository.register(username, password, nama, role);
-                if (berhasil) {
+                if (berhasil == true) {
                     view.getRegisterPanel().resetForm();
                     view.getLoginPanel().resetForm();
                     view.getLoginPanel().setStatusLogin("Akun '" + username + "' berhasil dibuat! Silakan login.");
@@ -337,7 +337,7 @@ public class BankSampahController {
                     String usernameDihapus = currentUser.getUsername();
                     boolean berhasil = UserRepository.deleteUser(usernameDihapus);
                     view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
-                    if (berhasil) {
+                    if (berhasil == true) {
                         this.currentUser = null;
                         view.getNasabahPanel().clearJumlahTukar();
                         view.getLoginPanel().resetForm();
@@ -359,7 +359,7 @@ public class BankSampahController {
                     String usernameDihapus = currentUser.getUsername();
                     boolean berhasil = UserRepository.deleteUser(usernameDihapus);
                     view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
-                    if (berhasil) {
+                    if (berhasil == true) {
                         this.currentUser = null;
                         view.getPetugasPanel().clearBeratKg();
                         view.getLoginPanel().resetForm();
@@ -381,7 +381,7 @@ public class BankSampahController {
                     String usernameDihapus = currentUser.getUsername();
                     boolean berhasil = UserRepository.deleteUser(usernameDihapus);
                     view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
-                    if (berhasil) {
+                    if (berhasil == true) {
                         this.currentUser = null;
                         view.getLoginPanel().resetForm();
                         view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");

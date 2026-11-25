@@ -15,7 +15,7 @@ public class SisaMakanan extends SampahOrganik {
         " akan membusuk dalam " + getEstimasiHariBusuk() + " hari. ";
         String infoTambahan = "hati hati, bau nya bakal tajam ke hidung...";
 
-        if (berbauTajam) {
+        if (berbauTajam == true) {
             return info + infoTambahan;
         } else {
             return info;

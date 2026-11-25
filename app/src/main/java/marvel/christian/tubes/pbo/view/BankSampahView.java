@@ -62,7 +62,10 @@ public class BankSampahView implements DataObserver {
             petugasPanel.setRiwayatText(teksRiwayat);
             adminPanel.setRiwayatText(teksRiwayat);
         } else {
-            return;
+            String pesanKosong = "Maaf, belum ada data nya untuk riwayat transaksinya.\n";
+            nasabahPanel.setRiwayatText(pesanKosong);
+            petugasPanel.setRiwayatText(pesanKosong);
+            adminPanel.setRiwayatText(pesanKosong);
         }
     }
 
