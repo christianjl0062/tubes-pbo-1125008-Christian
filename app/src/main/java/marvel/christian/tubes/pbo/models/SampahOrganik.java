@@ -1,7 +1,7 @@
 package marvel.christian.tubes.pbo.models;
 
 // Bagian Marvel
-public class SampahOrganik extends Sampah {
+public abstract class SampahOrganik extends Sampah {
     private int estimasiHariBusuk; 
     
     public SampahOrganik(String kodeSampah, String namaSampah, double hargaSampahPerKg, int estimasiHariBusuk) {

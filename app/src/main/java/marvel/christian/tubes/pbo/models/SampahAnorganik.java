@@ -1,7 +1,7 @@
 package marvel.christian.tubes.pbo.models;
 
 // Bagian Marvel
-public class SampahAnorganik extends Sampah {
+public abstract class SampahAnorganik extends Sampah {
     private String jenisBahan;
 
     public SampahAnorganik(String kodeSampah, String namaSampah, double hargaSampahPerKg, String jenisBahan) {
