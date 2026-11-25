@@ -19,6 +19,7 @@ public class AdminPanel extends JPanel {
     private JTextField txtBonusPersen;
     private JButton btnSimpanStrategi;
     private JButton btnLogout;
+    private JButton btnHapusAkun;
     private JTextArea txtRiwayat;
 
     public AdminPanel() {
@@ -39,13 +40,18 @@ public class AdminPanel extends JPanel {
         txtBonusPersen.setBorder(BorderFactory.createTitledBorder("Persentase Bonus (%)"));
         btnSimpanStrategi = new JButton("Terapkan Strategi");
         lblStatusAdmin = new JLabel("Strategi aktif: Harga Normal");
+
+        JPanel panelAksiAkun = new JPanel(new GridLayout(1, 2, 8, 0));
         btnLogout = new JButton("Logout");
+        btnHapusAkun = new JButton("Hapus Akun");
+        panelAksiAkun.add(btnLogout);
+        panelAksiAkun.add(btnHapusAkun);
 
         pengaturanPanel.add(cmbStrategiHarga);
         pengaturanPanel.add(txtBonusPersen);
         pengaturanPanel.add(btnSimpanStrategi);
         pengaturanPanel.add(lblStatusAdmin);
-        pengaturanPanel.add(btnLogout);
+        pengaturanPanel.add(panelAksiAkun);
 
         txtRiwayat = new JTextArea();
         txtRiwayat.setEditable(false);
@@ -79,6 +85,10 @@ public class AdminPanel extends JPanel {
 
     public JButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public JButton getBtnHapusAkun() {
+        return btnHapusAkun;
     }
 
     public void setRiwayatText(String teks) {

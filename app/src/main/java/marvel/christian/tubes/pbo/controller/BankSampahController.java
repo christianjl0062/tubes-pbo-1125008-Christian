@@ -28,6 +28,7 @@ public class BankSampahController {
         eventAdmin();
         eventLogout();
         eventRegister();
+        eventDeleteAkun();
     }
 
     public void eventLogin() {
@@ -219,10 +220,11 @@ public class BankSampahController {
         });
     }
 
-    public void eventLogout() {
+    private void eventLogout() {
         view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
             view.getNasabahPanel().setStatusNasabah(" ");
+            view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
         });
 
@@ -230,34 +232,80 @@ public class BankSampahController {
             this.currentUser = null;
             view.getPetugasPanel().setStatusPetugas(" ");
             view.getPetugasPanel().setInfoDaurUlang("");
+            view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
         });
 
         view.getAdminPanel().getBtnLogout().addActionListener(e -> {
             this.currentUser = null;
             view.getAdminPanel().setStatusAdmin(" ");
+            view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
             view.showCard("LOGIN_CARD");
         });
     }
 
-    public void eventDeleteAccount() {
-        view.getNasabahPanel().getBtnLogout().addActionListener(e -> {
-            this.currentUser = null;
-            view.getNasabahPanel().setStatusNasabah(" ");
-            view.showCard("LOGIN_CARD");
+    public void eventDeleteAkun() {
+        view.getNasabahPanel().getBtnHapusAkun().addActionListener(e -> {
+            if (currentUser != null) {
+                if (view.getNasabahPanel().getBtnHapusAkun().getText().equals("Hapus Akun")) {
+                    view.getNasabahPanel().getBtnHapusAkun().setText("Yakin Hapus? Coba Pikirkan lagi.");
+                    view.getNasabahPanel().setStatusNasabah("Klik 'Yakin Hapus?' untuk hapus akun anda.");
+                } else {
+                    String usernameDihapus = currentUser.getUsername();
+                    boolean berhasil = UserRepository.deleteUser(usernameDihapus);
+                    view.getNasabahPanel().getBtnHapusAkun().setText("Hapus Akun");
+                    if (berhasil) {
+                        this.currentUser = null;
+                        view.getLoginPanel().resetForm();
+                        view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");
+                        view.showCard("LOGIN_CARD");
+                    } else {
+                        view.getNasabahPanel().setStatusNasabah("Gagal menghapus akun dari database!");
+                    }
+                }
+            }
         });
 
-        view.getPetugasPanel().getBtnLogout().addActionListener(e -> {
-            this.currentUser = null;
-            view.getPetugasPanel().setStatusPetugas(" ");
-            view.getPetugasPanel().setInfoDaurUlang("");
-            view.showCard("LOGIN_CARD");
+        view.getPetugasPanel().getBtnHapusAkun().addActionListener(e -> {
+            if (currentUser != null) {
+                if (view.getPetugasPanel().getBtnHapusAkun().getText().equals("Hapus Akun")) {
+                    view.getPetugasPanel().getBtnHapusAkun().setText("Yakin Hapus?");
+                    view.getPetugasPanel().setStatusPetugas("Klik 'Yakin Hapus?' lagi untuk hapus akun!");
+                } else {
+                    String usernameDihapus = currentUser.getUsername();
+                    boolean berhasil = UserRepository.deleteUser(usernameDihapus);
+                    view.getPetugasPanel().getBtnHapusAkun().setText("Hapus Akun");
+                    if (berhasil) {
+                        this.currentUser = null;
+                        view.getLoginPanel().resetForm();
+                        view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");
+                        view.showCard("LOGIN_CARD");
+                    } else {
+                        view.getPetugasPanel().setStatusPetugas("Gagal menghapus akun dari database!");
+                    }
+                }
+            }
         });
 
-        view.getAdminPanel().getBtnLogout().addActionListener(e -> {
-            this.currentUser = null;
-            view.getAdminPanel().setStatusAdmin(" ");
-            view.showCard("LOGIN_CARD");
+        view.getAdminPanel().getBtnHapusAkun().addActionListener(e -> {
+            if (currentUser != null) {
+                if (view.getAdminPanel().getBtnHapusAkun().getText().equals("Hapus Akun")) {
+                    view.getAdminPanel().getBtnHapusAkun().setText("Yakin Hapus?");
+                    view.getAdminPanel().setStatusAdmin("Klik 'Yakin Hapus?' lagi untuk hapus akun!");
+                } else {
+                    String usernameDihapus = currentUser.getUsername();
+                    boolean berhasil = UserRepository.deleteUser(usernameDihapus);
+                    view.getAdminPanel().getBtnHapusAkun().setText("Hapus Akun");
+                    if (berhasil) {
+                        this.currentUser = null;
+                        view.getLoginPanel().resetForm();
+                        view.getLoginPanel().setStatusLogin("Akun '" + usernameDihapus + "' berhasil dihapus.");
+                        view.showCard("LOGIN_CARD");
+                    } else {
+                        view.getAdminPanel().setStatusAdmin("Gagal menghapus akun dari database!");
+                    }
+                }
+            }
         });
     }
 }
